@@ -1,4 +1,4 @@
-package com.bs.ps.controller;
+package com.bs.perform.controller;
 
 import org.springframework.stereotype.Service;
 
