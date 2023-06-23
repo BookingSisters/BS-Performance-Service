@@ -1,45 +1,71 @@
 package com.bs.perform.services;
 
+import com.bs.perform.dtos.PerformanceCreateRequestDto;
+import com.bs.perform.dtos.PerformanceGetResponseDto;
+import com.bs.perform.dtos.PerformanceUpdateRequestDto;
+import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.Performance;
-import jakarta.annotation.PostConstruct;
+import com.bs.perform.repository.PerformanceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
-import software.amazon.awssdk.enhanced.dynamodb.Key;
-import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
-import software.amazon.awssdk.services.dynamodb.model.*;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PerformanceService {
 
-    private final DynamoDbEnhancedClient dynamoDbEnhancedClient;
-    private DynamoDbTable<Performance> performanceTable;
+    private final PerformanceRepository performanceRepository;
+    public void createPerformance(PerformanceCreateRequestDto performanceDto) {
 
-    @PostConstruct
-    public void init() {
-        this.performanceTable = this.dynamoDbEnhancedClient.table("BS-Performance", TableSchema.fromBean(Performance.class));
+        Performance performance = Performance.builder()
+                .title(performanceDto.getTitle())
+                .description(performanceDto.getDescription())
+                .runTime(performanceDto.getRunTime())
+                .totalSeatCount(performanceDto.getTotalSeatCount())
+                .performanceStartDate(performanceDto.getPerformanceStartDate())
+                .performanceEndDate(performanceDto.getPerformanceEndDate())
+                .reservationStartDate(performanceDto.getReservationStartDate())
+                .reservationEndDate(performanceDto.getReservationEndDate())
+                .location(performanceDto.getLocation())
+                .seatGradeList(performanceDto.getSeatGradeList())
+                .sessionList(performanceDto.getSessionList())
+                .build();
+
+        performanceRepository.createPerformance(performance);
     }
 
-    public Performance createPerformance(Performance performance) {
+    public void updatePerformance(String id, PerformanceUpdateRequestDto performanceDto) {
 
-        try {
-            performanceTable.putItem(performance);
-        } catch (ResourceNotFoundException e) {
-            log.error("Be sure that it exists and that you've typed its name correctly!");
-        } catch (DynamoDbException e) {
-            log.error(e.getMessage());
+        Performance performance = Performance.builder()
+                .title(performanceDto.getTitle())
+                .description(performanceDto.getDescription())
+                .build();
+
+        performanceRepository.updatePerformance(id, performance);
+    }
+
+    public PerformanceGetResponseDto getPerformanceById(String id) {
+
+        Performance performance = performanceRepository.getPerformanceById(id);
+
+        if (performance == null) {
+            throw new ResourceNotFoundException(id);
         }
 
-        return performance;
+        return PerformanceGetResponseDto.builder()
+                .id(performance.getId())
+                .title(performance.getTitle())
+                .description(performance.getDescription())
+                .runTime(performance.getRunTime())
+                .totalSeatCount(performance.getTotalSeatCount())
+                .performanceStartDate(performance.getPerformanceStartDate())
+                .performanceEndDate(performance.getPerformanceEndDate())
+                .reservationStartDate(performance.getReservationStartDate())
+                .reservationEndDate(performance.getReservationEndDate())
+                .location(performance.getLocation())
+                .seatGradeList(performance.getSeatGradeList())
+                .sessionList(performance.getSessionList())
+                .build();
     }
-
-    public Performance getPerformance(String id) {
-        Performance performance = performanceTable.getItem(Key.builder().partitionValue(id).build());
-        return performance;
-    }
-
 }
