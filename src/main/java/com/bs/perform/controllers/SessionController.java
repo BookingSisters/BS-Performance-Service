@@ -1,10 +1,10 @@
 package com.bs.perform.controllers;
 
 import com.bs.perform.dtos.response.CommonResponseDto;
-import com.bs.perform.dtos.request.PerformanceCreateDto;
-import com.bs.perform.dtos.request.PerformanceUpdateDto;
-import com.bs.perform.dtos.response.PerformanceGetResponseDto;
-import com.bs.perform.services.PerformanceService;
+import com.bs.perform.dtos.request.SessionCreateDto;
+import com.bs.perform.dtos.request.SessionUpdateDto;
+import com.bs.perform.dtos.response.SessionGetResponseDto;
+import com.bs.perform.services.SessionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,40 +20,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/performances")
-public class PerformanceController {
+@RequestMapping("/sessions")
+public class SessionController {
 
-    private final PerformanceService performanceService;
+    private final SessionService sessionService;
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommonResponseDto createPerformance(
-        @RequestBody @Valid final PerformanceCreateDto performanceCreateDto) {
-        performanceService.createPerformance(performanceCreateDto);
+    public CommonResponseDto createSession(
+        @RequestBody @Valid final SessionCreateDto sessionCreateDto) {
+        sessionService.createSession(sessionCreateDto);
         return new CommonResponseDto(HttpStatus.CREATED.toString(), "successfully created");
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommonResponseDto updatePerformance(
+    public CommonResponseDto updateSession(
         @PathVariable final Long id,
-        @RequestBody @Valid final PerformanceUpdateDto performanceUpdateDto) {
-        performanceService.updatePerformance(id, performanceUpdateDto);
+        @RequestBody @Valid final SessionUpdateDto sessionUpdateDto) {
+        sessionService.updateSession(id, sessionUpdateDto);
         return new CommonResponseDto(HttpStatus.OK.toString(), "successfully updated");
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommonResponseDto deletePerformance(
+    public CommonResponseDto deleteSession(
         @PathVariable final Long id) {
-        performanceService.deletePerformance(id);
+        sessionService.deleteSession(id);
         return new CommonResponseDto(HttpStatus.OK.toString(), "successfully deleted");
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PerformanceGetResponseDto getPerformance(@PathVariable final Long id) {
-        return performanceService.getPerformanceById(id);
+    public SessionGetResponseDto getSession(@PathVariable final Long id) {
+        return sessionService.getSessionById(id);
     }
 
 }

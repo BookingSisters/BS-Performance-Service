@@ -1,10 +1,10 @@
 package com.bs.perform.controllers;
 
 import com.bs.perform.dtos.response.CommonResponseDto;
-import com.bs.perform.dtos.request.PerformanceCreateDto;
-import com.bs.perform.dtos.request.PerformanceUpdateDto;
-import com.bs.perform.dtos.response.PerformanceGetResponseDto;
-import com.bs.perform.services.PerformanceService;
+import com.bs.perform.dtos.request.SeatCreateDto;
+import com.bs.perform.dtos.request.SeatUpdateDto;
+import com.bs.perform.dtos.response.SeatGetResponseDto;
+import com.bs.perform.services.SeatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,40 +20,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/performances")
-public class PerformanceController {
+@RequestMapping("/seats")
+public class SeatController {
 
-    private final PerformanceService performanceService;
+    private final SeatService seatService;
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommonResponseDto createPerformance(
-        @RequestBody @Valid final PerformanceCreateDto performanceCreateDto) {
-        performanceService.createPerformance(performanceCreateDto);
+    public CommonResponseDto createSeat(
+        @RequestBody @Valid final SeatCreateDto seatCreateDto) {
+        seatService.createSeat(seatCreateDto);
         return new CommonResponseDto(HttpStatus.CREATED.toString(), "successfully created");
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommonResponseDto updatePerformance(
+    public CommonResponseDto updateSeat(
         @PathVariable final Long id,
-        @RequestBody @Valid final PerformanceUpdateDto performanceUpdateDto) {
-        performanceService.updatePerformance(id, performanceUpdateDto);
+        @RequestBody @Valid final SeatUpdateDto seatUpdateDto) {
+        seatService.updateSeat(id, seatUpdateDto);
         return new CommonResponseDto(HttpStatus.OK.toString(), "successfully updated");
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommonResponseDto deletePerformance(
+    public CommonResponseDto deleteSeat(
         @PathVariable final Long id) {
-        performanceService.deletePerformance(id);
+        seatService.deleteSeat(id);
         return new CommonResponseDto(HttpStatus.OK.toString(), "successfully deleted");
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PerformanceGetResponseDto getPerformance(@PathVariable final Long id) {
-        return performanceService.getPerformanceById(id);
+    public SeatGetResponseDto getSeat(@PathVariable final Long id) {
+        return seatService.getSeatById(id);
     }
 
 }
