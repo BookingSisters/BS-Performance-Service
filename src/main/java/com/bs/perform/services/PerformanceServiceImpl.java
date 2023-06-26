@@ -13,24 +13,30 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PerformanceService {
+public class PerformanceServiceImpl implements PerformanceService {
 
     private final PerformanceRepository performanceRepository;
 
-    public void createPerformance(PerformanceCreateDto performanceDto) {
+    @Override
+    public void createPerformance(final PerformanceCreateDto performanceDto) {
 
+        log.info("Creating performance with PerformanceCreateDto: {}", performanceDto);
         Performance performance = performanceCreateDtoConvertToPerformance(performanceDto);
         performanceRepository.createPerformance(performance);
     }
 
-    public void updatePerformance(String id, PerformanceUpdateDto performanceDto) {
+    @Override
+    public void updatePerformance(final String id, final PerformanceUpdateDto performanceDto) {
 
+        log.info("Updating performance with PerformanceUpdateDto: {}", performanceDto);
         Performance performance = performanceUpdateDtoConvertToPerformance(performanceDto);
         performanceRepository.updatePerformance(id, performance);
     }
 
-    public PerformanceGetResponseDto getPerformanceById(String id) {
+    @Override
+    public PerformanceGetResponseDto getPerformanceById(final String id) {
 
+        log.info("GetPerformance with ID: {}", id);
         Performance performance = performanceRepository.getPerformanceById(id);
         if (performance == null) {
             throw new ResourceNotFoundException(id);
@@ -39,7 +45,7 @@ public class PerformanceService {
     }
 
 
-    private Performance performanceCreateDtoConvertToPerformance(PerformanceCreateDto performanceDto) {
+    private Performance performanceCreateDtoConvertToPerformance(final PerformanceCreateDto performanceDto) {
         return Performance.builder()
                 .title(performanceDto.getTitle())
                 .description(performanceDto.getDescription())
@@ -55,7 +61,7 @@ public class PerformanceService {
                 .build();
     }
 
-    private Performance performanceUpdateDtoConvertToPerformance(PerformanceUpdateDto performanceDto) {
+    private Performance performanceUpdateDtoConvertToPerformance(final PerformanceUpdateDto performanceDto) {
         return Performance.builder()
                 .title(performanceDto.getTitle())
                 .description(performanceDto.getDescription())
@@ -71,7 +77,7 @@ public class PerformanceService {
                 .build();
     }
 
-    private PerformanceGetResponseDto convertToPerformanceGetResponseDto(Performance performance) {
+    private PerformanceGetResponseDto convertToPerformanceGetResponseDto(final Performance performance) {
         return PerformanceGetResponseDto.builder()
                 .id(performance.getId())
                 .title(performance.getTitle())
