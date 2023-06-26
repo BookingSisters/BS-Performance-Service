@@ -9,7 +9,6 @@ import com.bs.perform.models.Performance;
 import com.bs.perform.models.SeatGrade;
 import com.bs.perform.models.Session;
 import com.bs.perform.repository.PerformanceRepository;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,8 +25,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -48,6 +45,7 @@ class PerformanceServiceImplTest {
         seatGradeList = getSeatGradeList();
         sessionList = getSessionList();
     }
+
 
     @Test
     @DisplayName("공연 생성 테스트")
