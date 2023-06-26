@@ -29,9 +29,7 @@ public class Performance {
     private String location;
     private List<SeatGrade> seatGradeList;
     private List<Session> sessionList;
-    private String createdBy;
     private LocalDateTime createdDate;
-    private String lastModifiedBy;
     private LocalDateTime lastModifiedDate;
     private boolean isDeleted;
     private LocalDateTime deletedDate;

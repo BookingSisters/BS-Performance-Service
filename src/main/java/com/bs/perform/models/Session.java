@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
@@ -14,11 +15,13 @@ import java.util.Objects;
 @Data
 public class Session {
 
+    private LocalDate sessionDate;
     private LocalTime sessionTime;
     private List<String> performers;
 
     @Builder
-    public Session(LocalTime sessionTime, List<String> performers) {
+    public Session(LocalDate sessionDate, LocalTime sessionTime, List<String> performers) {
+        this.sessionDate = Objects.requireNonNull(sessionDate, "sessionDate must not be null");
         this.sessionTime = Objects.requireNonNull(sessionTime, "sessionTime must not be null");
         this.performers = Objects.requireNonNull(performers, "performers must not be null");
         if (performers.isEmpty()) {
