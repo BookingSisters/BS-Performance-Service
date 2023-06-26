@@ -15,19 +15,19 @@ public class PerformanceController {
     private final PerformanceService performanceService;
 
     @PutMapping("")
-    public ResponseEntity<PerformanceCreateResponseDto> createPerformance(@RequestBody PerformanceCreateRequestDto performanceCreateRequestDto) {
-        performanceService.createPerformance(performanceCreateRequestDto);
+    public ResponseEntity<PerformanceCreateResponseDto> createPerformance(@RequestBody final PerformanceCreateDto performanceCreateDto) {
+        performanceService.createPerformance(performanceCreateDto);
         return new ResponseEntity<>(new PerformanceCreateResponseDto("200", "successfully created"), HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<PerformanceUpdateResponseDto> updatePerformance(@PathVariable String id, @RequestBody PerformanceUpdateRequestDto performanceUpdateRequestDto) {
-        performanceService.updatePerformance(id, performanceUpdateRequestDto);
+    public ResponseEntity<PerformanceUpdateResponseDto> updatePerformance(@PathVariable final String id, @RequestBody final PerformanceUpdateDto performanceUpdateDto) {
+        performanceService.updatePerformance(id, performanceUpdateDto);
         return new ResponseEntity<>(new PerformanceUpdateResponseDto("200", "successfully updated"), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PerformanceGetResponseDto> getPerformance(@PathVariable String id) {
+    public ResponseEntity<PerformanceGetResponseDto> getPerformance(@PathVariable final String id) {
         PerformanceGetResponseDto performanceGetResponseDto = performanceService.getPerformanceById(id);
         return new ResponseEntity<>(performanceGetResponseDto, HttpStatus.OK);
     }

@@ -1,14 +1,11 @@
 package com.bs.perform.repository;
 
 import com.bs.perform.models.Performance;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
-import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
 import java.time.LocalDateTime;
 
@@ -17,14 +14,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class PerformanceRepository {
 
-
-    private final DynamoDbEnhancedClient dynamoDbEnhancedClient;
-    private DynamoDbTable<Performance> performanceTable;
-
-    @PostConstruct
-    public void init() {
-        this.performanceTable = this.dynamoDbEnhancedClient.table("BS-Performance", TableSchema.fromBean(Performance.class));
-    }
+    private final DynamoDbTable<Performance> performanceTable;
 
     public void createPerformance(Performance performance) {
 

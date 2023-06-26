@@ -5,17 +5,16 @@ import com.bs.perform.models.Session;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
+@Getter @ToString
 @Builder
-@RequiredArgsConstructor
-public class PerformanceUpdateRequestDto {
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
+public class PerformanceCreateDto {
 
     @NotBlank
     private final String title;
