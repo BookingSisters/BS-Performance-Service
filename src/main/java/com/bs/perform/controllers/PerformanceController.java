@@ -1,7 +1,12 @@
 package com.bs.perform.controllers;
 
-import com.bs.perform.dtos.*;
+import com.bs.perform.dtos.request.PerformanceCreateDto;
+import com.bs.perform.dtos.request.PerformanceUpdateDto;
+import com.bs.perform.dtos.response.PerformanceCreateResponseDto;
+import com.bs.perform.dtos.response.PerformanceGetResponseDto;
+import com.bs.perform.dtos.response.PerformanceUpdateResponseDto;
 import com.bs.perform.services.PerformanceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +19,14 @@ public class PerformanceController {
 
     private final PerformanceService performanceService;
 
-    @PutMapping("")
-    public ResponseEntity<PerformanceCreateResponseDto> createPerformance(@RequestBody final PerformanceCreateDto performanceCreateDto) {
+    @PostMapping("")
+    public ResponseEntity<PerformanceCreateResponseDto> createPerformance(@RequestBody @Valid final PerformanceCreateDto performanceCreateDto) {
         performanceService.createPerformance(performanceCreateDto);
         return new ResponseEntity<>(new PerformanceCreateResponseDto("200", "successfully created"), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<PerformanceUpdateResponseDto> updatePerformance(@PathVariable final String id, @RequestBody final PerformanceUpdateDto performanceUpdateDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<PerformanceUpdateResponseDto> updatePerformance(@PathVariable final String id, @RequestBody @Valid final PerformanceUpdateDto performanceUpdateDto) {
         performanceService.updatePerformance(id, performanceUpdateDto);
         return new ResponseEntity<>(new PerformanceUpdateResponseDto("200", "successfully updated"), HttpStatus.OK);
     }

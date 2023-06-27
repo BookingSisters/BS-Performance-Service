@@ -1,8 +1,8 @@
 package com.bs.perform.services;
 
-import com.bs.perform.dtos.PerformanceCreateDto;
-import com.bs.perform.dtos.PerformanceGetResponseDto;
-import com.bs.perform.dtos.PerformanceUpdateDto;
+import com.bs.perform.dtos.request.PerformanceCreateDto;
+import com.bs.perform.dtos.response.PerformanceGetResponseDto;
+import com.bs.perform.dtos.request.PerformanceUpdateDto;
 import com.bs.perform.enums.Grade;
 import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.Performance;
@@ -11,11 +11,13 @@ import com.bs.perform.models.Session;
 import com.bs.perform.repository.PerformanceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -37,6 +39,9 @@ class PerformanceServiceImplTest {
     @Mock
     private PerformanceRepository performanceRepository;
 
+    @Mock
+    private ModelMapper modelMapper;
+
     List<SeatGrade> seatGradeList;
     List<Session> sessionList;
 
@@ -46,9 +51,8 @@ class PerformanceServiceImplTest {
         sessionList = getSessionList();
     }
 
-
     @Test
-    @DisplayName("공연 생성 테스트")
+    @DisplayName("유효한 PerformanceCreateDto가 주어졌을 때, 정상적으로 공연을 저장")
     void createPerformanceTest() {
 
         PerformanceCreateDto performanceCreateDto = getPerformanceCreateDto();
@@ -61,7 +65,17 @@ class PerformanceServiceImplTest {
     }
 
     @Test
-    @DisplayName("공연 수정 테스트")
+    @DisplayName("유효하지 않은 PerformanceCreateDto가 주어졌을 때, NullPointerException이 발생")
+    void createPerformanceFailTest() {
+
+        PerformanceCreateDto performanceCreateDto = getPerformanceCreateFailDto();
+
+        assertThatThrownBy(() -> performanceService.createPerformance(performanceCreateDto))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("유효한 ID와 PerformanceUpdateDto가 주어졌을 때, 정상적으로 공연을 업데이트")
     void updatePerformanceTest() {
 
         String id = "123";
@@ -75,13 +89,26 @@ class PerformanceServiceImplTest {
     }
 
     @Test
-    @DisplayName("공연 조회 성공 테스트")
+    @DisplayName("유효하지 않은 PerformanceUpdateDto가 주어졌을 때, NullPointerException이 발생")
+    void updatePerformanceFailTest() {
+
+        String id = "123";
+        PerformanceUpdateDto performanceUpdateDto = getPerformanceUpdateFailDto();
+
+        assertThatThrownBy(() -> performanceService.updatePerformance(id, performanceUpdateDto))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("기존에 존재하는 공연 ID가 주어졌을 때, PerformanceGetResponseDto를 반환")
     void getPerformanceByIdTest_found() {
 
         String id = "123";
         Performance performance = getPerformance();
+        PerformanceGetResponseDto performanceGetResponseDto = getPerformanceGetResponseDto();
 
         doReturn(performance).when(performanceRepository).getPerformanceById(id);
+        doReturn(performanceGetResponseDto).when(modelMapper).map(performance, PerformanceGetResponseDto.class);
 
         PerformanceGetResponseDto performanceById = performanceService.getPerformanceById(id);
 
@@ -89,8 +116,9 @@ class PerformanceServiceImplTest {
     }
 
     @Test
-    @DisplayName("공연 조회 실패 테스트")
+    @DisplayName("존재하지 않는 공연 ID가 주어졌을 때, ResourceNotFoundException이 발생")
     void getPerformanceByIdTest_notFound() {
+
         String id = "123";
 
         doReturn(null).when(performanceRepository).getPerformanceById(id);
@@ -100,7 +128,6 @@ class PerformanceServiceImplTest {
     }
 
     private static List<SeatGrade> getSeatGradeList() {
-
         SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000)).seatCount(100).build();
         SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000)).seatCount(200).build();
         return Arrays.asList(seatGradeVip, seatGradeR);
@@ -128,8 +155,36 @@ class PerformanceServiceImplTest {
                 .build();
     }
 
+    private PerformanceCreateDto getPerformanceCreateFailDto() {
+        return PerformanceCreateDto.builder()
+                .description("This is BTS 2023 concert")
+                .build();
+    }
+
     private PerformanceUpdateDto getPerformanceUpdateDto() {
         return PerformanceUpdateDto.builder()
+                .title("BTS 2023 concert")
+                .description("This is BTS 2023 concert")
+                .runTime(100)
+                .totalSeatCount(300)
+                .reservationStartDate(LocalDate.of(2023, 6, 15))
+                .reservationEndDate(LocalDate.of(2023, 7, 15))
+                .performanceStartDate(LocalDate.of(2023, 7, 22))
+                .performanceEndDate(LocalDate.of(2023, 7, 23))
+                .location("Jamsil Sports Complex")
+                .seatGradeList(seatGradeList)
+                .sessionList(sessionList)
+                .build();
+    }
+
+    private PerformanceUpdateDto getPerformanceUpdateFailDto() {
+        return PerformanceUpdateDto.builder()
+                .description("This is BTS 2023 concert")
+                .build();
+    }
+
+    private PerformanceGetResponseDto getPerformanceGetResponseDto(){
+        return PerformanceGetResponseDto.builder()
                 .title("BTS 2023 concert")
                 .description("This is BTS 2023 concert")
                 .runTime(100)

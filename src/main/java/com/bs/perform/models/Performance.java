@@ -56,6 +56,13 @@ public class Performance {
         this.location = Objects.requireNonNull(location, "Location cannot be null");
         this.seatGradeList = Objects.requireNonNull(seatGradeList, "Seat Grade List cannot be null");
         this.sessionList = Objects.requireNonNull(sessionList, "Session List cannot be null");
+
+        if(performanceStartDate.isAfter(performanceEndDate)) {
+            throw new IllegalArgumentException("Performance Start Date cannot be after Performance End Date");
+        }
+        if(reservationStartDate.isAfter(reservationEndDate)) {
+            throw new IllegalArgumentException("Reservation Start Date cannot be after Reservation End Date");
+        }
     }
 
 }

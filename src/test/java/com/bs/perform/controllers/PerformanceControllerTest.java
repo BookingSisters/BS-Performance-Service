@@ -1,9 +1,10 @@
 package com.bs.perform.controllers;
 
-import com.bs.perform.dtos.PerformanceCreateDto;
-import com.bs.perform.dtos.PerformanceGetResponseDto;
-import com.bs.perform.dtos.PerformanceUpdateDto;
+import com.bs.perform.dtos.request.PerformanceCreateDto;
+import com.bs.perform.dtos.response.PerformanceGetResponseDto;
+import com.bs.perform.dtos.request.PerformanceUpdateDto;
 import com.bs.perform.enums.Grade;
+import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.SeatGrade;
 import com.bs.perform.models.Session;
 import com.bs.perform.services.PerformanceService;
@@ -47,32 +48,40 @@ class PerformanceControllerTest {
 
     @BeforeEach
     public void setup() {
-
-        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000)).seatCount(100).build();
-        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000)).seatCount(200).build();
-        seatGradeList = Arrays.asList(seatGradeVip, seatGradeR);
-
-        Session session1 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(13,0)).performers(Arrays.asList("ActorA", "ActorB")).build();
-        Session session2 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(17,0)).performers(Arrays.asList("ActorC", "ActorD")).build();
-        sessionList = Arrays.asList(session1, session2);
+        seatGradeList = getSeatGradeList();
+        sessionList = getSessionList();
     }
 
     @Test
-    @DisplayName("공연 생성 API 테스트")
+    @DisplayName("유효한 데이터로 공연 생성 API 호출 시 성공")
     void createPerformanceTest() throws Exception {
 
         PerformanceCreateDto performanceCreateDto = getPerformanceCreateDto();
 
         doNothing().when(performanceServiceImpl).createPerformance(any(PerformanceCreateDto.class));
 
-        mockMvc.perform(put("/performance")
+        mockMvc.perform(post("/performance")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(performanceCreateDto)))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    @DisplayName("공연 업데이트 API 테스트")
+    @DisplayName("잘못된 데이터로 공연 생성 API 호출 시 실패")
+    void createPerformanceTest_Failure() throws Exception {
+
+        PerformanceCreateDto performanceCreateDto = getInvalidPerformanceCreateDto();
+
+        doThrow(NullPointerException.class).when(performanceServiceImpl).createPerformance(any(PerformanceCreateDto.class));
+
+        mockMvc.perform(post("/performance")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(performanceCreateDto)))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    @DisplayName("유효한 데이터로 공연 업데이트 API 호출 시 성공")
     void updatePerformanceTest() throws Exception {
 
         String id = "123";
@@ -80,15 +89,29 @@ class PerformanceControllerTest {
 
         doNothing().when(performanceServiceImpl).updatePerformance(eq(id), any(PerformanceUpdateDto.class));
 
-        mockMvc.perform(post("/performance/" + id)
+        mockMvc.perform(put("/performance/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(performanceUpdateDto)))
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("잘못된 데이터로 공연 업데이트 API 호출 시 실패")
+    void updatePerformanceTest_Failure() throws Exception {
+
+        String id = "123";
+        PerformanceUpdateDto performanceUpdateDto = getInvalidPerformanceUpdateDto();
+
+        doThrow(NullPointerException.class).when(performanceServiceImpl).updatePerformance(eq(id), any(PerformanceUpdateDto.class));
+
+        mockMvc.perform(put("/performance/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(performanceUpdateDto)))
+                .andExpect(status().isInternalServerError());
+    }
 
     @Test
-    @DisplayName("공연 아이디로 조회 API 테스트")
+    @DisplayName("유효한 공연 아이디로 조회 API 호출 시 성공")
     void getPerformanceTest() throws Exception {
 
         String id = "123";
@@ -101,6 +124,31 @@ class PerformanceControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(performanceGetResponseDto.getTitle()))
                 .andExpect(jsonPath("$.description").value(performanceGetResponseDto.getDescription()));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 아이디로 공연 조회 API 호출 시 실패")
+    void getPerformanceTest_Failure() throws Exception {
+
+        String id = "123";
+
+        doThrow(ResourceNotFoundException.class).when(performanceServiceImpl).getPerformanceById(id);
+
+        mockMvc.perform(get("/performance/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    private static List<SeatGrade> getSeatGradeList() {
+        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000)).seatCount(100).build();
+        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000)).seatCount(200).build();
+        return Arrays.asList(seatGradeVip, seatGradeR);
+    }
+
+    private static List<Session> getSessionList() {
+        Session session1 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(13,0)).performers(Arrays.asList("ActorA", "ActorB")).build();
+        Session session2 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(17,0)).performers(Arrays.asList("ActorC", "ActorD")).build();
+        return Arrays.asList(session1, session2);
     }
 
     private PerformanceCreateDto getPerformanceCreateDto() {
@@ -119,6 +167,12 @@ class PerformanceControllerTest {
                 .build();
     }
 
+    private PerformanceCreateDto getInvalidPerformanceCreateDto() {
+        return PerformanceCreateDto.builder()
+                .description("This is BTS 2023 concert")
+                .build();
+    }
+
     private PerformanceUpdateDto getPerformanceUpdateDto() {
         return PerformanceUpdateDto.builder()
                 .title("BTS 2023 concert")
@@ -132,6 +186,12 @@ class PerformanceControllerTest {
                 .location("Jamsil Sports Complex")
                 .seatGradeList(seatGradeList)
                 .sessionList(sessionList)
+                .build();
+    }
+
+    private PerformanceUpdateDto getInvalidPerformanceUpdateDto() {
+        return PerformanceUpdateDto.builder()
+                .description("This is BTS 2023 concert")
                 .build();
     }
 

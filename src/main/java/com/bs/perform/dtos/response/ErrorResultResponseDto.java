@@ -1,4 +1,4 @@
-package com.bs.perform.dtos;
+package com.bs.perform.dtos.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

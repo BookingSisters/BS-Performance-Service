@@ -1,8 +1,8 @@
 package com.bs.perform.services;
 
-import com.bs.perform.dtos.PerformanceCreateDto;
-import com.bs.perform.dtos.PerformanceGetResponseDto;
-import com.bs.perform.dtos.PerformanceUpdateDto;
+import com.bs.perform.dtos.request.PerformanceCreateDto;
+import com.bs.perform.dtos.response.PerformanceGetResponseDto;
+import com.bs.perform.dtos.request.PerformanceUpdateDto;
 
 public interface PerformanceService {
     void createPerformance(PerformanceCreateDto performanceDto);

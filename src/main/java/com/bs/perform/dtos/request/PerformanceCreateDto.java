@@ -1,5 +1,6 @@
-package com.bs.perform.dtos;
+package com.bs.perform.dtos.request;
 
+import com.bs.perform.models.Performance;
 import com.bs.perform.models.SeatGrade;
 import com.bs.perform.models.Session;
 import jakarta.validation.constraints.NotBlank;
@@ -39,4 +40,19 @@ public class PerformanceCreateDto {
     @NotEmpty
     private final List<Session> sessionList;
 
+    public Performance toEntity(){
+        return Performance.builder()
+                .title(this.title)
+                .description(this.description)
+                .runTime(this.runTime)
+                .totalSeatCount(this.totalSeatCount)
+                .performanceStartDate(this.performanceStartDate)
+                .performanceEndDate(this.performanceEndDate)
+                .reservationStartDate(this.reservationStartDate)
+                .reservationEndDate(this.reservationEndDate)
+                .location(this.location)
+                .seatGradeList(this.seatGradeList)
+                .sessionList(this.sessionList)
+                .build();
+    }
 }

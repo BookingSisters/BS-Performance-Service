@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
@@ -39,15 +40,8 @@ class PerformanceRepositoryImplTest {
 
     @BeforeEach
     public void setup() {
-
-        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000)).seatCount(100).build();
-        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000)).seatCount(200).build();
-        seatGradeList = Arrays.asList(seatGradeVip, seatGradeR);
-
-        Session session1 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(13,0)).performers(Arrays.asList("ActorA", "ActorB")).build();
-        Session session2 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(17,0)).performers(Arrays.asList("ActorC", "ActorD")).build();
-        sessionList = Arrays.asList(session1, session2);
-
+        seatGradeList = getSeatGradeList();
+        sessionList = getSessionList();
         performance = getPerformance();
     }
 
@@ -85,6 +79,18 @@ class PerformanceRepositoryImplTest {
         Performance resultPerformance = performanceRepository.getPerformanceById(id);
 
         assertThat(resultPerformance).isEqualTo(performance);
+    }
+
+    private static List<SeatGrade> getSeatGradeList() {
+        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000)).seatCount(100).build();
+        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000)).seatCount(200).build();
+        return Arrays.asList(seatGradeVip, seatGradeR);
+    }
+
+    private static List<Session> getSessionList() {
+        Session session1 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(13,0)).performers(Arrays.asList("ActorA", "ActorB")).build();
+        Session session2 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(17,0)).performers(Arrays.asList("ActorC", "ActorD")).build();
+        return Arrays.asList(session1, session2);
     }
 
     private Performance getPerformance() {

@@ -1,13 +1,14 @@
 package com.bs.perform.services;
 
-import com.bs.perform.dtos.PerformanceCreateDto;
-import com.bs.perform.dtos.PerformanceGetResponseDto;
-import com.bs.perform.dtos.PerformanceUpdateDto;
+import com.bs.perform.dtos.request.PerformanceCreateDto;
+import com.bs.perform.dtos.response.PerformanceGetResponseDto;
+import com.bs.perform.dtos.request.PerformanceUpdateDto;
 import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.Performance;
 import com.bs.perform.repository.PerformanceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,13 +16,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PerformanceServiceImpl implements PerformanceService {
 
+    private final ModelMapper modelMapper;
     private final PerformanceRepository performanceRepository;
 
     @Override
     public void createPerformance(final PerformanceCreateDto performanceDto) {
 
         log.info("Creating performance with PerformanceCreateDto: {}", performanceDto);
-        Performance performance = performanceCreateDtoConvertToPerformance(performanceDto);
+        Performance performance = performanceDto.toEntity();
         performanceRepository.createPerformance(performance);
     }
 
@@ -29,7 +31,7 @@ public class PerformanceServiceImpl implements PerformanceService {
     public void updatePerformance(final String id, final PerformanceUpdateDto performanceDto) {
 
         log.info("Updating performance with PerformanceUpdateDto: {}", performanceDto);
-        Performance performance = performanceUpdateDtoConvertToPerformance(performanceDto);
+        Performance performance = performanceDto.toEntity();
         performanceRepository.updatePerformance(id, performance);
     }
 
@@ -41,56 +43,7 @@ public class PerformanceServiceImpl implements PerformanceService {
         if (performance == null) {
             throw new ResourceNotFoundException(id);
         }
-        return convertToPerformanceGetResponseDto(performance);
+        return modelMapper.map(performance, PerformanceGetResponseDto.class);
     }
 
-
-    private Performance performanceCreateDtoConvertToPerformance(final PerformanceCreateDto performanceDto) {
-        return Performance.builder()
-                .title(performanceDto.getTitle())
-                .description(performanceDto.getDescription())
-                .runTime(performanceDto.getRunTime())
-                .totalSeatCount(performanceDto.getTotalSeatCount())
-                .performanceStartDate(performanceDto.getPerformanceStartDate())
-                .performanceEndDate(performanceDto.getPerformanceEndDate())
-                .reservationStartDate(performanceDto.getReservationStartDate())
-                .reservationEndDate(performanceDto.getReservationEndDate())
-                .location(performanceDto.getLocation())
-                .seatGradeList(performanceDto.getSeatGradeList())
-                .sessionList(performanceDto.getSessionList())
-                .build();
-    }
-
-    private Performance performanceUpdateDtoConvertToPerformance(final PerformanceUpdateDto performanceDto) {
-        return Performance.builder()
-                .title(performanceDto.getTitle())
-                .description(performanceDto.getDescription())
-                .runTime(performanceDto.getRunTime())
-                .totalSeatCount(performanceDto.getTotalSeatCount())
-                .performanceStartDate(performanceDto.getPerformanceStartDate())
-                .performanceEndDate(performanceDto.getPerformanceEndDate())
-                .reservationStartDate(performanceDto.getReservationStartDate())
-                .reservationEndDate(performanceDto.getReservationEndDate())
-                .location(performanceDto.getLocation())
-                .seatGradeList(performanceDto.getSeatGradeList())
-                .sessionList(performanceDto.getSessionList())
-                .build();
-    }
-
-    private PerformanceGetResponseDto convertToPerformanceGetResponseDto(final Performance performance) {
-        return PerformanceGetResponseDto.builder()
-                .id(performance.getId())
-                .title(performance.getTitle())
-                .description(performance.getDescription())
-                .runTime(performance.getRunTime())
-                .totalSeatCount(performance.getTotalSeatCount())
-                .performanceStartDate(performance.getPerformanceStartDate())
-                .performanceEndDate(performance.getPerformanceEndDate())
-                .reservationStartDate(performance.getReservationStartDate())
-                .reservationEndDate(performance.getReservationEndDate())
-                .location(performance.getLocation())
-                .seatGradeList(performance.getSeatGradeList())
-                .sessionList(performance.getSessionList())
-                .build();
-    }
 }
