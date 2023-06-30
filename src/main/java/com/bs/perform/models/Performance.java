@@ -40,7 +40,10 @@ public class Performance {
     }
 
     @Builder
-    public Performance(String title, String description, int runTime, int totalSeatCount, LocalDate performanceStartDate, LocalDate performanceEndDate, LocalDate reservationStartDate, LocalDate reservationEndDate, String location, List<SeatGrade> seatGradeList, List<Session> sessionList) {
+    public Performance(String title, String description, int runTime, int totalSeatCount,
+        LocalDate performanceStartDate, LocalDate performanceEndDate,
+        LocalDate reservationStartDate, LocalDate reservationEndDate, String location,
+        List<SeatGrade> seatGradeList, List<Session> sessionList) {
         this.id = UUID.randomUUID().toString();
         this.createdDate = LocalDateTime.now();
         this.lastModifiedDate = LocalDateTime.now();
@@ -57,11 +60,13 @@ public class Performance {
         this.seatGradeList = Objects.requireNonNull(seatGradeList, "Seat Grade List cannot be null");
         this.sessionList = Objects.requireNonNull(sessionList, "Session List cannot be null");
 
-        if(performanceStartDate.isAfter(performanceEndDate)) {
-            throw new IllegalArgumentException("Performance Start Date cannot be after Performance End Date");
+        if (performanceStartDate.isAfter(performanceEndDate)) {
+            throw new IllegalArgumentException(
+                "Performance Start Date cannot be after Performance End Date");
         }
-        if(reservationStartDate.isAfter(reservationEndDate)) {
-            throw new IllegalArgumentException("Reservation Start Date cannot be after Reservation End Date");
+        if (reservationStartDate.isAfter(reservationEndDate)) {
+            throw new IllegalArgumentException(
+                "Reservation Start Date cannot be after Reservation End Date");
         }
     }
 

@@ -61,9 +61,9 @@ class PerformanceControllerTest {
         doNothing().when(performanceServiceImpl).createPerformance(any(PerformanceCreateDto.class));
 
         mockMvc.perform(post("/performance")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(performanceCreateDto)))
-                .andExpect(status().isCreated());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(performanceCreateDto)))
+            .andExpect(status().isCreated());
     }
 
     @Test
@@ -72,12 +72,13 @@ class PerformanceControllerTest {
 
         PerformanceCreateDto performanceCreateDto = getInvalidPerformanceCreateDto();
 
-        doThrow(NullPointerException.class).when(performanceServiceImpl).createPerformance(any(PerformanceCreateDto.class));
+        doThrow(NullPointerException.class).when(performanceServiceImpl)
+            .createPerformance(any(PerformanceCreateDto.class));
 
         mockMvc.perform(post("/performance")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(performanceCreateDto)))
-                .andExpect(status().isInternalServerError());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(performanceCreateDto)))
+            .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -87,12 +88,13 @@ class PerformanceControllerTest {
         String id = "123";
         PerformanceUpdateDto performanceUpdateDto = getPerformanceUpdateDto();
 
-        doNothing().when(performanceServiceImpl).updatePerformance(eq(id), any(PerformanceUpdateDto.class));
+        doNothing().when(performanceServiceImpl)
+            .updatePerformance(eq(id), any(PerformanceUpdateDto.class));
 
         mockMvc.perform(put("/performance/" + id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(performanceUpdateDto)))
-                .andExpect(status().isOk());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(performanceUpdateDto)))
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -102,12 +104,13 @@ class PerformanceControllerTest {
         String id = "123";
         PerformanceUpdateDto performanceUpdateDto = getInvalidPerformanceUpdateDto();
 
-        doThrow(NullPointerException.class).when(performanceServiceImpl).updatePerformance(eq(id), any(PerformanceUpdateDto.class));
+        doThrow(NullPointerException.class).when(performanceServiceImpl)
+            .updatePerformance(eq(id), any(PerformanceUpdateDto.class));
 
         mockMvc.perform(put("/performance/" + id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(performanceUpdateDto)))
-                .andExpect(status().isInternalServerError());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(performanceUpdateDto)))
+            .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -120,10 +123,10 @@ class PerformanceControllerTest {
         doReturn(performanceGetResponseDto).when(performanceServiceImpl).getPerformanceById(id);
 
         mockMvc.perform(get("/performance/" + id)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value(performanceGetResponseDto.getTitle()))
-                .andExpect(jsonPath("$.description").value(performanceGetResponseDto.getDescription()));
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.title").value(performanceGetResponseDto.getTitle()))
+            .andExpect(jsonPath("$.description").value(performanceGetResponseDto.getDescription()));
     }
 
     @Test
@@ -132,83 +135,88 @@ class PerformanceControllerTest {
 
         String id = "123";
 
-        doThrow(ResourceNotFoundException.class).when(performanceServiceImpl).getPerformanceById(id);
+        doThrow(ResourceNotFoundException.class).when(performanceServiceImpl)
+            .getPerformanceById(id);
 
         mockMvc.perform(get("/performance/" + id)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
     }
 
     private static List<SeatGrade> getSeatGradeList() {
-        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000)).seatCount(100).build();
-        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000)).seatCount(200).build();
+        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000))
+            .seatCount(100).build();
+        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000))
+            .seatCount(200).build();
         return Arrays.asList(seatGradeVip, seatGradeR);
     }
 
     private static List<Session> getSessionList() {
-        Session session1 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(13,0)).performers(Arrays.asList("ActorA", "ActorB")).build();
-        Session session2 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(17,0)).performers(Arrays.asList("ActorC", "ActorD")).build();
+        Session session1 = Session.builder().sessionDate(LocalDate.of(2023, 6, 24))
+            .sessionTime(LocalTime.of(13, 0)).performers(Arrays.asList("ActorA", "ActorB")).build();
+        Session session2 = Session.builder().sessionDate(LocalDate.of(2023, 6, 24))
+            .sessionTime(LocalTime.of(17, 0)).performers(Arrays.asList("ActorC", "ActorD")).build();
         return Arrays.asList(session1, session2);
     }
 
     private PerformanceCreateDto getPerformanceCreateDto() {
         return PerformanceCreateDto.builder()
-                .title("BTS 2023 concert")
-                .description("This is BTS 2023 concert")
-                .runTime(100)
-                .totalSeatCount(300)
-                .reservationStartDate(LocalDate.of(2023, 6, 15))
-                .reservationEndDate(LocalDate.of(2023, 7, 15))
-                .performanceStartDate(LocalDate.of(2023, 7, 22))
-                .performanceEndDate(LocalDate.of(2023, 7, 23))
-                .location("Jamsil Sports Complex")
-                .seatGradeList(seatGradeList)
-                .sessionList(sessionList)
-                .build();
+            .title("BTS 2023 concert")
+            .description("This is BTS 2023 concert")
+            .runTime(100)
+            .totalSeatCount(300)
+            .reservationStartDate(LocalDate.of(2023, 6, 15))
+            .reservationEndDate(LocalDate.of(2023, 7, 15))
+            .performanceStartDate(LocalDate.of(2023, 7, 22))
+            .performanceEndDate(LocalDate.of(2023, 7, 23))
+            .location("Jamsil Sports Complex")
+            .seatGradeList(seatGradeList)
+            .sessionList(sessionList)
+            .build();
     }
 
     private PerformanceCreateDto getInvalidPerformanceCreateDto() {
         return PerformanceCreateDto.builder()
-                .description("This is BTS 2023 concert")
-                .build();
+            .description("This is BTS 2023 concert")
+            .build();
     }
 
     private PerformanceUpdateDto getPerformanceUpdateDto() {
         return PerformanceUpdateDto.builder()
-                .title("BTS 2023 concert")
-                .description("This is BTS 2023 concert")
-                .runTime(100)
-                .totalSeatCount(300)
-                .reservationStartDate(LocalDate.of(2023, 6, 15))
-                .reservationEndDate(LocalDate.of(2023, 7, 15))
-                .performanceStartDate(LocalDate.of(2023, 7, 22))
-                .performanceEndDate(LocalDate.of(2023, 7, 23))
-                .location("Jamsil Sports Complex")
-                .seatGradeList(seatGradeList)
-                .sessionList(sessionList)
-                .build();
+            .title("BTS 2023 concert")
+            .description("This is BTS 2023 concert")
+            .runTime(100)
+            .totalSeatCount(300)
+            .reservationStartDate(LocalDate.of(2023, 6, 15))
+            .reservationEndDate(LocalDate.of(2023, 7, 15))
+            .performanceStartDate(LocalDate.of(2023, 7, 22))
+            .performanceEndDate(LocalDate.of(2023, 7, 23))
+            .location("Jamsil Sports Complex")
+            .seatGradeList(seatGradeList)
+            .sessionList(sessionList)
+            .build();
     }
 
     private PerformanceUpdateDto getInvalidPerformanceUpdateDto() {
         return PerformanceUpdateDto.builder()
-                .description("This is BTS 2023 concert")
-                .build();
+            .description("This is BTS 2023 concert")
+            .build();
     }
 
     private PerformanceGetResponseDto getPerformanceGetResponseDto() {
         return PerformanceGetResponseDto.builder()
-                .title("BTS 2023 concert")
-                .description("This is BTS 2023 concert")
-                .runTime(100)
-                .totalSeatCount(300)
-                .reservationStartDate(LocalDate.of(2023, 6,15))
-                .reservationEndDate(LocalDate.of(2023, 7,15))
-                .performanceStartDate(LocalDate.of(2023, 7,22))
-                .performanceEndDate(LocalDate.of(2023, 7,23))
-                .location("Jamsil Sports Complex")
-                .seatGradeList(seatGradeList)
-                .sessionList(sessionList)
-                .build();
+            .title("BTS 2023 concert")
+            .description("This is BTS 2023 concert")
+            .runTime(100)
+            .totalSeatCount(300)
+            .reservationStartDate(LocalDate.of(2023, 6, 15))
+            .reservationEndDate(LocalDate.of(2023, 7, 15))
+            .performanceStartDate(LocalDate.of(2023, 7, 22))
+            .performanceEndDate(LocalDate.of(2023, 7, 23))
+            .location("Jamsil Sports Complex")
+            .seatGradeList(seatGradeList)
+            .sessionList(sessionList)
+            .build();
     }
 
 }

@@ -11,7 +11,8 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter @ToString
+@Getter
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
@@ -40,19 +41,19 @@ public class PerformanceUpdateDto {
     @NotEmpty
     private final List<Session> sessionList;
 
-    public Performance toEntity(){
+    public Performance toEntity() {
         return Performance.builder()
-                .title(this.title)
-                .description(this.description)
-                .runTime(this.runTime)
-                .totalSeatCount(this.totalSeatCount)
-                .performanceStartDate(this.performanceStartDate)
-                .performanceEndDate(this.performanceEndDate)
-                .reservationStartDate(this.reservationStartDate)
-                .reservationEndDate(this.reservationEndDate)
-                .location(this.location)
-                .seatGradeList(this.seatGradeList)
-                .sessionList(this.sessionList)
-                .build();
+            .title(this.title)
+            .description(this.description)
+            .runTime(this.runTime)
+            .totalSeatCount(this.totalSeatCount)
+            .performanceStartDate(this.performanceStartDate)
+            .performanceEndDate(this.performanceEndDate)
+            .reservationStartDate(this.reservationStartDate)
+            .reservationEndDate(this.reservationEndDate)
+            .location(this.location)
+            .seatGradeList(this.seatGradeList)
+            .sessionList(this.sessionList)
+            .build();
     }
 }

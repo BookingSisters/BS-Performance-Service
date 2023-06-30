@@ -13,30 +13,39 @@ import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 public class ControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ErrorResultResponseDto resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
-        log.error("[ResourceNotFoundException] ex", e);
-        return new ErrorResultResponseDto("400", e.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public ErrorResultResponseDto illegalArgumentExceptionHandler(IllegalArgumentException e) {
         log.error("[IllegalArgumentException] ex", e);
-        return new ErrorResultResponseDto("400", e.getMessage());
+        return new ErrorResultResponseDto(HttpStatus.BAD_REQUEST.toString(), e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NullPointerException.class)
+    public ErrorResultResponseDto nullPointerExceptionHandler(NullPointerException e) {
+        log.error("[NullPointerException] ex", e);
+        return new ErrorResultResponseDto(HttpStatus.BAD_REQUEST.toString(), e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ErrorResultResponseDto resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
+        log.error("[ResourceNotFoundException] ex", e);
+        return new ErrorResultResponseDto(HttpStatus.BAD_REQUEST.toString(), e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(DynamoDbException.class)
-    public ErrorResultResponseDto dynamoDbExceptionHandler(DynamoDbException e) {
-        log.error("[DynamoDbException] ex", e);
-        return new ErrorResultResponseDto("500", e.getMessage());
+    @ExceptionHandler(CustomDatabaseException.class)
+    public ErrorResultResponseDto customDatabaseExceptionHandler(CustomDatabaseException e) {
+        log.error("[CustomDatabaseException] ex", e);
+        return new ErrorResultResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+            e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ErrorResultResponseDto exHandler(Exception e) {
-        log.error("[exceptionHandler] ex", e.getMessage());
-        return new ErrorResultResponseDto("500", e.getMessage());
+        log.error("[exceptionHandler] ex", e);
+        return new ErrorResultResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+            e.getMessage());
     }
 }

@@ -8,10 +8,9 @@ import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.Performance;
 import com.bs.perform.models.SeatGrade;
 import com.bs.perform.models.Session;
-import com.bs.perform.repository.PerformanceRepository;
+import com.bs.perform.repositories.PerformanceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -71,7 +70,7 @@ class PerformanceServiceImplTest {
         PerformanceCreateDto performanceCreateDto = getPerformanceCreateFailDto();
 
         assertThatThrownBy(() -> performanceService.createPerformance(performanceCreateDto))
-                .isInstanceOf(NullPointerException.class);
+            .isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -96,7 +95,7 @@ class PerformanceServiceImplTest {
         PerformanceUpdateDto performanceUpdateDto = getPerformanceUpdateFailDto();
 
         assertThatThrownBy(() -> performanceService.updatePerformance(id, performanceUpdateDto))
-                .isInstanceOf(NullPointerException.class);
+            .isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -108,7 +107,8 @@ class PerformanceServiceImplTest {
         PerformanceGetResponseDto performanceGetResponseDto = getPerformanceGetResponseDto();
 
         doReturn(performance).when(performanceRepository).getPerformanceById(id);
-        doReturn(performanceGetResponseDto).when(modelMapper).map(performance, PerformanceGetResponseDto.class);
+        doReturn(performanceGetResponseDto).when(modelMapper)
+            .map(performance, PerformanceGetResponseDto.class);
 
         PerformanceGetResponseDto performanceById = performanceService.getPerformanceById(id);
 
@@ -124,95 +124,99 @@ class PerformanceServiceImplTest {
         doReturn(null).when(performanceRepository).getPerformanceById(id);
 
         assertThatThrownBy(() -> performanceService.getPerformanceById(id))
-                .isInstanceOf(ResourceNotFoundException.class);
+            .isInstanceOf(ResourceNotFoundException.class);
     }
 
     private static List<SeatGrade> getSeatGradeList() {
-        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000)).seatCount(100).build();
-        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000)).seatCount(200).build();
+        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000))
+            .seatCount(100).build();
+        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000))
+            .seatCount(200).build();
         return Arrays.asList(seatGradeVip, seatGradeR);
     }
 
     private static List<Session> getSessionList() {
-        Session session1 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(13,0)).performers(Arrays.asList("ActorA", "ActorB")).build();
-        Session session2 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(17,0)).performers(Arrays.asList("ActorC", "ActorD")).build();
+        Session session1 = Session.builder().sessionDate(LocalDate.of(2023, 6, 24))
+            .sessionTime(LocalTime.of(13, 0)).performers(Arrays.asList("ActorA", "ActorB")).build();
+        Session session2 = Session.builder().sessionDate(LocalDate.of(2023, 6, 24))
+            .sessionTime(LocalTime.of(17, 0)).performers(Arrays.asList("ActorC", "ActorD")).build();
         return Arrays.asList(session1, session2);
     }
 
     private PerformanceCreateDto getPerformanceCreateDto() {
         return PerformanceCreateDto.builder()
-                .title("BTS 2023 concert")
-                .description("This is BTS 2023 concert")
-                .runTime(100)
-                .totalSeatCount(300)
-                .reservationStartDate(LocalDate.of(2023, 6, 15))
-                .reservationEndDate(LocalDate.of(2023, 7, 15))
-                .performanceStartDate(LocalDate.of(2023, 7, 22))
-                .performanceEndDate(LocalDate.of(2023, 7, 23))
-                .location("Jamsil Sports Complex")
-                .seatGradeList(seatGradeList)
-                .sessionList(sessionList)
-                .build();
+            .title("BTS 2023 concert")
+            .description("This is BTS 2023 concert")
+            .runTime(100)
+            .totalSeatCount(300)
+            .reservationStartDate(LocalDate.of(2023, 6, 15))
+            .reservationEndDate(LocalDate.of(2023, 7, 15))
+            .performanceStartDate(LocalDate.of(2023, 7, 22))
+            .performanceEndDate(LocalDate.of(2023, 7, 23))
+            .location("Jamsil Sports Complex")
+            .seatGradeList(seatGradeList)
+            .sessionList(sessionList)
+            .build();
     }
 
     private PerformanceCreateDto getPerformanceCreateFailDto() {
         return PerformanceCreateDto.builder()
-                .description("This is BTS 2023 concert")
-                .build();
+            .description("This is BTS 2023 concert")
+            .build();
     }
 
     private PerformanceUpdateDto getPerformanceUpdateDto() {
         return PerformanceUpdateDto.builder()
-                .title("BTS 2023 concert")
-                .description("This is BTS 2023 concert")
-                .runTime(100)
-                .totalSeatCount(300)
-                .reservationStartDate(LocalDate.of(2023, 6, 15))
-                .reservationEndDate(LocalDate.of(2023, 7, 15))
-                .performanceStartDate(LocalDate.of(2023, 7, 22))
-                .performanceEndDate(LocalDate.of(2023, 7, 23))
-                .location("Jamsil Sports Complex")
-                .seatGradeList(seatGradeList)
-                .sessionList(sessionList)
-                .build();
+            .title("BTS 2023 concert")
+            .description("This is BTS 2023 concert")
+            .runTime(100)
+            .totalSeatCount(300)
+            .reservationStartDate(LocalDate.of(2023, 6, 15))
+            .reservationEndDate(LocalDate.of(2023, 7, 15))
+            .performanceStartDate(LocalDate.of(2023, 7, 22))
+            .performanceEndDate(LocalDate.of(2023, 7, 23))
+            .location("Jamsil Sports Complex")
+            .seatGradeList(seatGradeList)
+            .sessionList(sessionList)
+            .build();
     }
 
     private PerformanceUpdateDto getPerformanceUpdateFailDto() {
         return PerformanceUpdateDto.builder()
-                .description("This is BTS 2023 concert")
-                .build();
+            .description("This is BTS 2023 concert")
+            .build();
     }
 
-    private PerformanceGetResponseDto getPerformanceGetResponseDto(){
+    private PerformanceGetResponseDto getPerformanceGetResponseDto() {
         return PerformanceGetResponseDto.builder()
-                .title("BTS 2023 concert")
-                .description("This is BTS 2023 concert")
-                .runTime(100)
-                .totalSeatCount(300)
-                .reservationStartDate(LocalDate.of(2023, 6, 15))
-                .reservationEndDate(LocalDate.of(2023, 7, 15))
-                .performanceStartDate(LocalDate.of(2023, 7, 22))
-                .performanceEndDate(LocalDate.of(2023, 7, 23))
-                .location("Jamsil Sports Complex")
-                .seatGradeList(seatGradeList)
-                .sessionList(sessionList)
-                .build();
+            .title("BTS 2023 concert")
+            .description("This is BTS 2023 concert")
+            .runTime(100)
+            .totalSeatCount(300)
+            .reservationStartDate(LocalDate.of(2023, 6, 15))
+            .reservationEndDate(LocalDate.of(2023, 7, 15))
+            .performanceStartDate(LocalDate.of(2023, 7, 22))
+            .performanceEndDate(LocalDate.of(2023, 7, 23))
+            .location("Jamsil Sports Complex")
+            .seatGradeList(seatGradeList)
+            .sessionList(sessionList)
+            .build();
     }
 
     private Performance getPerformance() {
         return Performance.builder()
-                .title("BTS 2023 concert")
-                .description("This is BTS 2023 concert")
-                .runTime(100)
-                .totalSeatCount(300)
-                .reservationStartDate(LocalDate.of(2023, 6, 15))
-                .reservationEndDate(LocalDate.of(2023, 7, 15))
-                .performanceStartDate(LocalDate.of(2023, 7, 22))
-                .performanceEndDate(LocalDate.of(2023, 7, 23))
-                .location("Jamsil Sports Complex")
-                .seatGradeList(seatGradeList)
-                .sessionList(sessionList)
-                .build();
+            .title("BTS 2023 concert")
+            .description("This is BTS 2023 concert")
+            .runTime(100)
+            .totalSeatCount(300)
+            .reservationStartDate(LocalDate.of(2023, 6, 15))
+            .reservationEndDate(LocalDate.of(2023, 7, 15))
+            .performanceStartDate(LocalDate.of(2023, 7, 22))
+            .performanceEndDate(LocalDate.of(2023, 7, 23))
+            .location("Jamsil Sports Complex")
+            .seatGradeList(seatGradeList)
+            .sessionList(sessionList)
+            .build();
     }
 
 }

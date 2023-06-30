@@ -1,4 +1,4 @@
-package com.bs.perform.repository;
+package com.bs.perform.repositories;
 
 import com.bs.perform.enums.Grade;
 import com.bs.perform.models.Performance;
@@ -61,7 +61,8 @@ class PerformanceRepositoryImplTest {
     void updatePerformanceTest() {
 
         String id = performance.getId();
-        doReturn(performance).when(performanceTable).getItem(Key.builder().partitionValue(id).build());
+        doReturn(performance).when(performanceTable)
+            .getItem(Key.builder().partitionValue(id).build());
         doReturn(performance).when(performanceTable).updateItem(performance);
 
         performanceRepository.updatePerformance(id, performance);
@@ -74,7 +75,8 @@ class PerformanceRepositoryImplTest {
     void getPerformanceByIdTest() {
 
         String id = performance.getId();
-        doReturn(performance).when(performanceTable).getItem(Key.builder().partitionValue(id).build());
+        doReturn(performance).when(performanceTable)
+            .getItem(Key.builder().partitionValue(id).build());
 
         Performance resultPerformance = performanceRepository.getPerformanceById(id);
 
@@ -82,31 +84,35 @@ class PerformanceRepositoryImplTest {
     }
 
     private static List<SeatGrade> getSeatGradeList() {
-        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000)).seatCount(100).build();
-        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000)).seatCount(200).build();
+        SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000))
+            .seatCount(100).build();
+        SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000))
+            .seatCount(200).build();
         return Arrays.asList(seatGradeVip, seatGradeR);
     }
 
     private static List<Session> getSessionList() {
-        Session session1 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(13,0)).performers(Arrays.asList("ActorA", "ActorB")).build();
-        Session session2 = Session.builder().sessionDate(LocalDate.of(2023,6,24)).sessionTime(LocalTime.of(17,0)).performers(Arrays.asList("ActorC", "ActorD")).build();
+        Session session1 = Session.builder().sessionDate(LocalDate.of(2023, 6, 24))
+            .sessionTime(LocalTime.of(13, 0)).performers(Arrays.asList("ActorA", "ActorB")).build();
+        Session session2 = Session.builder().sessionDate(LocalDate.of(2023, 6, 24))
+            .sessionTime(LocalTime.of(17, 0)).performers(Arrays.asList("ActorC", "ActorD")).build();
         return Arrays.asList(session1, session2);
     }
 
     private Performance getPerformance() {
         return Performance.builder()
-                .title("BTS 2023 concert")
-                .description("This is BTS 2023 concert")
-                .runTime(100)
-                .totalSeatCount(300)
-                .reservationStartDate(LocalDate.of(2023, 6, 15))
-                .reservationEndDate(LocalDate.of(2023, 7, 15))
-                .performanceStartDate(LocalDate.of(2023, 7, 22))
-                .performanceEndDate(LocalDate.of(2023, 7, 23))
-                .location("Jamsil Sports Complex")
-                .seatGradeList(seatGradeList)
-                .sessionList(sessionList)
-                .build();
+            .title("BTS 2023 concert")
+            .description("This is BTS 2023 concert")
+            .runTime(100)
+            .totalSeatCount(300)
+            .reservationStartDate(LocalDate.of(2023, 6, 15))
+            .reservationEndDate(LocalDate.of(2023, 7, 15))
+            .performanceStartDate(LocalDate.of(2023, 7, 22))
+            .performanceEndDate(LocalDate.of(2023, 7, 23))
+            .location("Jamsil Sports Complex")
+            .seatGradeList(seatGradeList)
+            .sessionList(sessionList)
+            .build();
     }
 
 }
