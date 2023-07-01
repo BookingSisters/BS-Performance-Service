@@ -1,9 +1,11 @@
 package com.bs.perform.repositories;
 
 import com.bs.perform.enums.Grade;
-import com.bs.perform.models.Performance;
-import com.bs.perform.models.SeatGrade;
-import com.bs.perform.models.Session;
+import com.bs.perform.models.performance.Performance;
+import com.bs.perform.models.performance.SeatGrade;
+import com.bs.perform.models.performance.Session;
+import com.bs.perform.models.venue.Seat;
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,7 @@ class PerformanceRepositoryImplTest {
     Performance performance;
     List<SeatGrade> seatGradeList;
     List<Session> sessionList;
+;
 
     @BeforeEach
     public void setup() {
@@ -83,33 +86,32 @@ class PerformanceRepositoryImplTest {
         assertThat(resultPerformance).isEqualTo(performance);
     }
 
-    private static List<SeatGrade> getSeatGradeList() {
+    private List<SeatGrade> getSeatGradeList() {
+        List<String> seatList = Arrays.asList("seat1", "seat2", "seat3");
         SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000))
-            .seatCount(100).build();
+            .seatCount(100).seatList(seatList).build();
         SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000))
-            .seatCount(200).build();
+            .seatCount(200).seatList(seatList).build();
         return Arrays.asList(seatGradeVip, seatGradeR);
     }
 
-    private static List<Session> getSessionList() {
+    private List<Session> getSessionList() {
         Session session1 = Session.builder().sessionDate(LocalDate.of(2023, 6, 24))
             .sessionTime(LocalTime.of(13, 0)).performers(Arrays.asList("ActorA", "ActorB")).build();
         Session session2 = Session.builder().sessionDate(LocalDate.of(2023, 6, 24))
             .sessionTime(LocalTime.of(17, 0)).performers(Arrays.asList("ActorC", "ActorD")).build();
         return Arrays.asList(session1, session2);
     }
-
     private Performance getPerformance() {
         return Performance.builder()
             .title("BTS 2023 concert")
             .description("This is BTS 2023 concert")
-            .runTime(100)
-            .totalSeatCount(300)
+            .runningTime(100)
             .reservationStartDate(LocalDate.of(2023, 6, 15))
             .reservationEndDate(LocalDate.of(2023, 7, 15))
             .performanceStartDate(LocalDate.of(2023, 7, 22))
             .performanceEndDate(LocalDate.of(2023, 7, 23))
-            .location("Jamsil Sports Complex")
+            .venueId("Jamsil Sports Complex")
             .seatGradeList(seatGradeList)
             .sessionList(sessionList)
             .build();

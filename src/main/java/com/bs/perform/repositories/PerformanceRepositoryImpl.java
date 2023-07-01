@@ -1,7 +1,7 @@
 package com.bs.perform.repositories;
 
 import com.bs.perform.exceptions.ResourceNotFoundException;
-import com.bs.perform.models.Performance;
+import com.bs.perform.models.performance.Performance;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -27,8 +27,7 @@ public class PerformanceRepositoryImpl implements PerformanceRepository {
     @Override
     public void updatePerformance(final String id, final Performance performance) {
 
-        Performance performanceForUpdate = performanceTable.getItem(
-            Key.builder().partitionValue(id).build());
+        Performance performanceForUpdate = performanceTable.getItem(Key.builder().partitionValue(id).build());
         if (performanceForUpdate == null) {
             throw new ResourceNotFoundException(id);
         }
@@ -42,8 +41,7 @@ public class PerformanceRepositoryImpl implements PerformanceRepository {
     @Override
     public Performance getPerformanceById(final String id) {
 
-        Performance performance = performanceTable.getItem(
-            Key.builder().partitionValue(id).build());
+        Performance performance = performanceTable.getItem(Key.builder().partitionValue(id).build());
         if (performance == null) {
             throw new ResourceNotFoundException(id);
         }

@@ -1,6 +1,7 @@
 package com.bs.perform.configs;
 
-import com.bs.perform.models.Performance;
+import com.bs.perform.models.performance.Performance;
+import com.bs.perform.models.venue.Venue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
@@ -12,12 +13,10 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 @Configuration
 public class DynamoDbConfig {
 
-    private String region = "ap-northeast-2";
-
     @Bean
     public DynamoDbClient dynamoDbClient() {
         return DynamoDbClient.builder()
-                .region(Region.of(region))
+                .region(Region.of("ap-northeast-2"))
                 .build();
     }
 
@@ -30,6 +29,11 @@ public class DynamoDbConfig {
     @Bean
     public DynamoDbTable<Performance> performanceTable(DynamoDbEnhancedClient dynamoDbEnhancedClient) {
         return dynamoDbEnhancedClient.table("BS-Performance", TableSchema.fromBean(Performance.class));
+    }
+
+    @Bean
+    public DynamoDbTable<Venue> venueTable(DynamoDbEnhancedClient dynamoDbEnhancedClient) {
+        return dynamoDbEnhancedClient.table("BS-Venue", TableSchema.fromBean(Venue.class));
     }
 
 }

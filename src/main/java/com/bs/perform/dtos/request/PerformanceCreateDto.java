@@ -1,8 +1,9 @@
 package com.bs.perform.dtos.request;
 
-import com.bs.perform.models.Performance;
-import com.bs.perform.models.SeatGrade;
-import com.bs.perform.models.Session;
+import com.bs.perform.models.performance.Performance;
+import com.bs.perform.models.performance.SeatGrade;
+import com.bs.perform.models.performance.Session;
+import com.bs.perform.models.venue.Venue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,9 +23,7 @@ public class PerformanceCreateDto {
     private final String title;
     @NotBlank
     private final String description;
-    @NotNull
-    private final int runTime;
-    @NotNull
+    private final int runningTime;
     private final int totalSeatCount;
     @NotNull
     private final LocalDate performanceStartDate;
@@ -35,7 +34,7 @@ public class PerformanceCreateDto {
     @NotNull
     private final LocalDate reservationEndDate;
     @NotBlank
-    private final String location;
+    private final String venueId;
     @NotEmpty
     private final List<SeatGrade> seatGradeList;
     @NotEmpty
@@ -45,13 +44,12 @@ public class PerformanceCreateDto {
         return Performance.builder()
             .title(this.title)
             .description(this.description)
-            .runTime(this.runTime)
-            .totalSeatCount(this.totalSeatCount)
+            .runningTime(this.runningTime)
             .performanceStartDate(this.performanceStartDate)
             .performanceEndDate(this.performanceEndDate)
             .reservationStartDate(this.reservationStartDate)
             .reservationEndDate(this.reservationEndDate)
-            .location(this.location)
+            .venueId(this.venueId)
             .seatGradeList(this.seatGradeList)
             .sessionList(this.sessionList)
             .build();

@@ -1,4 +1,4 @@
-package com.bs.perform.models;
+package com.bs.perform.models.performance;
 
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 @DynamoDbBean
-@NoArgsConstructor
 @Data
 public class Session {
 
@@ -20,6 +19,10 @@ public class Session {
     private LocalDate sessionDate;
     private LocalTime sessionTime;
     private List<String> performers;
+
+    public Session() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     @Builder
     public Session(LocalDate sessionDate, LocalTime sessionTime, List<String> performers) {

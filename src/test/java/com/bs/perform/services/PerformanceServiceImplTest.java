@@ -1,14 +1,29 @@
 package com.bs.perform.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import com.bs.perform.dtos.request.PerformanceCreateDto;
-import com.bs.perform.dtos.response.PerformanceGetResponseDto;
 import com.bs.perform.dtos.request.PerformanceUpdateDto;
+import com.bs.perform.dtos.response.PerformanceGetResponseDto;
 import com.bs.perform.enums.Grade;
 import com.bs.perform.exceptions.ResourceNotFoundException;
-import com.bs.perform.models.Performance;
-import com.bs.perform.models.SeatGrade;
-import com.bs.perform.models.Session;
+import com.bs.perform.models.performance.Performance;
+import com.bs.perform.models.performance.SeatGrade;
+import com.bs.perform.models.performance.Session;
 import com.bs.perform.repositories.PerformanceRepository;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,17 +32,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PerformanceServiceImplTest {
@@ -121,17 +125,18 @@ class PerformanceServiceImplTest {
 
         String id = "123";
 
-        doReturn(null).when(performanceRepository).getPerformanceById(id);
+        doThrow(ResourceNotFoundException.class).when(performanceRepository).getPerformanceById(id);
 
         assertThatThrownBy(() -> performanceService.getPerformanceById(id))
             .isInstanceOf(ResourceNotFoundException.class);
     }
 
-    private static List<SeatGrade> getSeatGradeList() {
+    private List<SeatGrade> getSeatGradeList() {
+        List<String> seatList = Arrays.asList("seat1", "seat2", "seat3");
         SeatGrade seatGradeVip = SeatGrade.builder().grade(Grade.VIP).price(new BigDecimal(200000))
-            .seatCount(100).build();
+            .seatCount(100).seatList(seatList).build();
         SeatGrade seatGradeR = SeatGrade.builder().grade(Grade.S).price(new BigDecimal(100000))
-            .seatCount(200).build();
+            .seatCount(200).seatList(seatList).build();
         return Arrays.asList(seatGradeVip, seatGradeR);
     }
 
@@ -147,13 +152,13 @@ class PerformanceServiceImplTest {
         return PerformanceCreateDto.builder()
             .title("BTS 2023 concert")
             .description("This is BTS 2023 concert")
-            .runTime(100)
+            .runningTime(100)
             .totalSeatCount(300)
             .reservationStartDate(LocalDate.of(2023, 6, 15))
             .reservationEndDate(LocalDate.of(2023, 7, 15))
             .performanceStartDate(LocalDate.of(2023, 7, 22))
             .performanceEndDate(LocalDate.of(2023, 7, 23))
-            .location("Jamsil Sports Complex")
+            .venueId("Jamsil Sports Complex")
             .seatGradeList(seatGradeList)
             .sessionList(sessionList)
             .build();
@@ -169,13 +174,13 @@ class PerformanceServiceImplTest {
         return PerformanceUpdateDto.builder()
             .title("BTS 2023 concert")
             .description("This is BTS 2023 concert")
-            .runTime(100)
+            .runningTime(100)
             .totalSeatCount(300)
             .reservationStartDate(LocalDate.of(2023, 6, 15))
             .reservationEndDate(LocalDate.of(2023, 7, 15))
             .performanceStartDate(LocalDate.of(2023, 7, 22))
             .performanceEndDate(LocalDate.of(2023, 7, 23))
-            .location("Jamsil Sports Complex")
+            .venueId("1")
             .seatGradeList(seatGradeList)
             .sessionList(sessionList)
             .build();
@@ -191,13 +196,13 @@ class PerformanceServiceImplTest {
         return PerformanceGetResponseDto.builder()
             .title("BTS 2023 concert")
             .description("This is BTS 2023 concert")
-            .runTime(100)
+            .runningTime(100)
             .totalSeatCount(300)
             .reservationStartDate(LocalDate.of(2023, 6, 15))
             .reservationEndDate(LocalDate.of(2023, 7, 15))
             .performanceStartDate(LocalDate.of(2023, 7, 22))
             .performanceEndDate(LocalDate.of(2023, 7, 23))
-            .location("Jamsil Sports Complex")
+            .venueId("1")
             .seatGradeList(seatGradeList)
             .sessionList(sessionList)
             .build();
@@ -207,13 +212,12 @@ class PerformanceServiceImplTest {
         return Performance.builder()
             .title("BTS 2023 concert")
             .description("This is BTS 2023 concert")
-            .runTime(100)
-            .totalSeatCount(300)
+            .runningTime(100)
             .reservationStartDate(LocalDate.of(2023, 6, 15))
             .reservationEndDate(LocalDate.of(2023, 7, 15))
             .performanceStartDate(LocalDate.of(2023, 7, 22))
             .performanceEndDate(LocalDate.of(2023, 7, 23))
-            .location("Jamsil Sports Complex")
+            .venueId("1")
             .seatGradeList(seatGradeList)
             .sessionList(sessionList)
             .build();

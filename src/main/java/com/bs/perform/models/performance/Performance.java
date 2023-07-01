@@ -1,5 +1,6 @@
-package com.bs.perform.models;
+package com.bs.perform.models.performance;
 
+import com.bs.perform.models.venue.Venue;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,27 +12,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
 @DynamoDbBean
-@NoArgsConstructor
 @Data
 public class Performance {
 
     private String id;
     private String title;
     private String description;
-    private int runTime;
-    private int totalSeatCount;
+    private int runningTime;
+    private String venueId;
     private LocalDate performanceStartDate;
     private LocalDate performanceEndDate;
     private LocalDate reservationStartDate;
     private LocalDate reservationEndDate;
-    private String location;
     private List<SeatGrade> seatGradeList;
     private List<Session> sessionList;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
-    private boolean isDeleted;
     private LocalDateTime deletedDate;
 
     @DynamoDbPartitionKey
@@ -39,26 +38,34 @@ public class Performance {
         return id;
     }
 
-    @Builder
-    public Performance(String title, String description, int runTime, int totalSeatCount,
-        LocalDate performanceStartDate, LocalDate performanceEndDate,
-        LocalDate reservationStartDate, LocalDate reservationEndDate, String location,
-        List<SeatGrade> seatGradeList, List<Session> sessionList) {
+    public Performance() {
         this.id = UUID.randomUUID().toString();
-        this.createdDate = LocalDateTime.now();
-        this.lastModifiedDate = LocalDateTime.now();
-        this.isDeleted = false;
+    }
+
+    @Builder
+    public Performance(String title, String description, int runningTime,
+        LocalDate performanceStartDate, LocalDate performanceEndDate,
+        LocalDate reservationStartDate, LocalDate reservationEndDate, String venueId,
+        List<SeatGrade> seatGradeList, List<Session> sessionList) {
+
+        this.id = UUID.randomUUID().toString();
         this.title = Objects.requireNonNull(title, "Title cannot be null");
         this.description = Objects.requireNonNull(description, "Description cannot be null");
-        this.runTime = runTime;
-        this.totalSeatCount = totalSeatCount;
-        this.performanceStartDate = Objects.requireNonNull(performanceStartDate, "Performance Start Date cannot be null");
-        this.performanceEndDate = Objects.requireNonNull(performanceEndDate, "Performance End Date cannot be null");
-        this.reservationStartDate = Objects.requireNonNull(reservationStartDate, "Reservation Start Date cannot be null");
-        this.reservationEndDate = Objects.requireNonNull(reservationEndDate, "Reservation End Date cannot be null");
-        this.location = Objects.requireNonNull(location, "Location cannot be null");
-        this.seatGradeList = Objects.requireNonNull(seatGradeList, "Seat Grade List cannot be null");
+        this.runningTime = runningTime;
+        this.venueId = Objects.requireNonNull(venueId, "Location cannot be null");
+        this.performanceStartDate = Objects.requireNonNull(performanceStartDate,
+            "Performance Start Date cannot be null");
+        this.performanceEndDate = Objects.requireNonNull(performanceEndDate,
+            "Performance End Date cannot be null");
+        this.reservationStartDate = Objects.requireNonNull(reservationStartDate,
+            "Reservation Start Date cannot be null");
+        this.reservationEndDate = Objects.requireNonNull(reservationEndDate,
+            "Reservation End Date cannot be null");
+        this.seatGradeList = Objects.requireNonNull(seatGradeList,
+            "Seat Grade List cannot be null");
         this.sessionList = Objects.requireNonNull(sessionList, "Session List cannot be null");
+        this.createdDate = LocalDateTime.now();
+        this.lastModifiedDate = LocalDateTime.now();
 
         if (performanceStartDate.isAfter(performanceEndDate)) {
             throw new IllegalArgumentException(

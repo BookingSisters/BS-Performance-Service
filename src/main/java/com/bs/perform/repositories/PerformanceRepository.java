@@ -1,6 +1,6 @@
 package com.bs.perform.repositories;
 
-import com.bs.perform.models.Performance;
+import com.bs.perform.models.performance.Performance;
 
 public interface PerformanceRepository {
 

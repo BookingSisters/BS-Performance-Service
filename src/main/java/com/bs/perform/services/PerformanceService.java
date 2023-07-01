@@ -3,13 +3,12 @@ package com.bs.perform.services;
 import com.bs.perform.dtos.request.PerformanceCreateDto;
 import com.bs.perform.dtos.response.PerformanceGetResponseDto;
 import com.bs.perform.dtos.request.PerformanceUpdateDto;
-import com.bs.perform.exceptions.CustomDatabaseException;
 
 public interface PerformanceService {
 
-    void createPerformance(PerformanceCreateDto performanceDto) throws CustomDatabaseException;
+    void createPerformance(final PerformanceCreateDto performanceDto);
 
-    void updatePerformance(String id, PerformanceUpdateDto performanceDto);
+    void updatePerformance(final String id, final PerformanceUpdateDto performanceDto);
 
-    PerformanceGetResponseDto getPerformanceById(String id);
+    PerformanceGetResponseDto getPerformanceById(final String id);
 }
