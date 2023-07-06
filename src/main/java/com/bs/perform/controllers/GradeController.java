@@ -1,10 +1,10 @@
 package com.bs.perform.controllers;
 
 import com.bs.perform.dtos.response.CommonResponseDto;
-import com.bs.perform.dtos.request.PerformanceCreateDto;
-import com.bs.perform.dtos.request.PerformanceUpdateDto;
-import com.bs.perform.dtos.response.PerformanceGetResponseDto;
-import com.bs.perform.services.PerformanceService;
+import com.bs.perform.dtos.request.GradeCreateDto;
+import com.bs.perform.dtos.request.GradeUpdateDto;
+import com.bs.perform.dtos.response.GradeGetResponseDto;
+import com.bs.perform.services.GradeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,40 +20,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/performances")
-public class PerformanceController {
+@RequestMapping("/grades")
+public class GradeController {
 
-    private final PerformanceService performanceService;
+    private final GradeService gradeService;
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommonResponseDto createPerformance(
-        @RequestBody @Valid final PerformanceCreateDto performanceCreateDto) {
-        performanceService.createPerformance(performanceCreateDto);
+    public CommonResponseDto createGrade(
+        @RequestBody @Valid final GradeCreateDto gradeCreateDto) {
+        gradeService.createGrade(gradeCreateDto);
         return new CommonResponseDto(HttpStatus.CREATED.toString(), "successfully created");
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommonResponseDto updatePerformance(
+    public CommonResponseDto updateGrade(
         @PathVariable final Long id,
-        @RequestBody @Valid final PerformanceUpdateDto performanceUpdateDto) {
-        performanceService.updatePerformance(id, performanceUpdateDto);
+        @RequestBody @Valid final GradeUpdateDto gradeUpdateDto) {
+        gradeService.updateGrade(id, gradeUpdateDto);
         return new CommonResponseDto(HttpStatus.OK.toString(), "successfully updated");
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommonResponseDto deletePerformance(
+    public CommonResponseDto deleteGrade(
         @PathVariable final Long id) {
-        performanceService.deletePerformance(id);
+        gradeService.deleteGrade(id);
         return new CommonResponseDto(HttpStatus.OK.toString(), "successfully deleted");
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PerformanceGetResponseDto getPerformance(@PathVariable final Long id) {
-        return performanceService.getPerformanceById(id);
+    public GradeGetResponseDto getGrade(@PathVariable final Long id) {
+        return gradeService.getGradeById(id);
     }
 
 }

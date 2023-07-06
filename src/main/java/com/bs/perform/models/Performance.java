@@ -1,38 +1,111 @@
 package com.bs.perform.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
-@DynamoDbBean
+@Getter
 @NoArgsConstructor
-public class Performance {
-    private String id;
+@Entity
+public class Performance extends BaseEntity {
+
+    @Id
+    @Column(name = "performance_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Lob
     private String description;
 
-    public Performance(String id, String title, String description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
+    @Column(nullable = false)
+    private int runningTime;
+
+    @Column(nullable = false)
+    private LocalDate performanceStartDate;
+
+    @Column(nullable = false)
+    private LocalDate performanceEndDate;
+
+    @Column(nullable = false)
+    private LocalDate reservationStartDate;
+
+    @Column(nullable = false)
+    private LocalDate reservationEndDate;
+
+    @ManyToOne
+    @JoinColumn(name = "venue_id")
+    private Venue venue;
+
+    @Builder
+    public Performance(String title, String description, int runningTime,
+        LocalDate performanceStartDate, LocalDate performanceEndDate,
+        LocalDate reservationStartDate, LocalDate reservationEndDate, Venue venue) {
+
+        this.title = Objects.requireNonNull(title, "Title cannot be null");
+        this.description = Objects.requireNonNull(description, "Description cannot be null");
+        this.runningTime = runningTime;
+        this.performanceStartDate = Objects.requireNonNull(performanceStartDate,
+            "Performance Start Date cannot be null");
+        this.performanceEndDate = Objects.requireNonNull(performanceEndDate,
+            "Performance End Date cannot be null");
+        this.reservationStartDate = Objects.requireNonNull(reservationStartDate,
+            "Reservation Start Date cannot be null");
+        this.reservationEndDate = Objects.requireNonNull(reservationEndDate,
+            "Reservation End Date cannot be null");
+
+        if (performanceStartDate.isAfter(performanceEndDate)) {
+            throw new IllegalArgumentException(
+                "Performance Start Date cannot be after Performance End Date");
+        }
+        if (reservationStartDate.isAfter(reservationEndDate)) {
+            throw new IllegalArgumentException(
+                "Reservation Start Date cannot be after Reservation End Date");
+        }
+        this.venue = Objects.requireNonNull(venue, "Venue cannot be null");
     }
-    @DynamoDbPartitionKey
-    public String getId() {
-        return id;
+
+    public void updatePerformance(String title, String description, int runningTime,
+        LocalDate performanceStartDate, LocalDate performanceEndDate,
+        LocalDate reservationStartDate, LocalDate reservationEndDate) {
+
+        this.title = Objects.requireNonNull(title, "Title cannot be null");
+        this.description = Objects.requireNonNull(description, "Description cannot be null");
+        this.runningTime = runningTime;
+        this.performanceStartDate = Objects.requireNonNull(performanceStartDate,
+            "Performance Start Date cannot be null");
+        this.performanceEndDate = Objects.requireNonNull(performanceEndDate,
+            "Performance End Date cannot be null");
+        this.reservationStartDate = Objects.requireNonNull(reservationStartDate,
+            "Reservation Start Date cannot be null");
+        this.reservationEndDate = Objects.requireNonNull(reservationEndDate,
+            "Reservation End Date cannot be null");
+
+        if (performanceStartDate.isAfter(performanceEndDate)) {
+            throw new IllegalArgumentException(
+                "Performance Start Date cannot be after Performance End Date");
+        }
+        if (reservationStartDate.isAfter(reservationEndDate)) {
+            throw new IllegalArgumentException(
+                "Reservation Start Date cannot be after Reservation End Date");
+        }
     }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
+
+    public void deletePerformance() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 }

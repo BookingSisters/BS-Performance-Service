@@ -1,11 +1,12 @@
 package com.bs.perform.controllers;
 
 import com.bs.perform.dtos.response.CommonResponseDto;
-import com.bs.perform.dtos.request.PerformanceCreateDto;
-import com.bs.perform.dtos.request.PerformanceUpdateDto;
-import com.bs.perform.dtos.response.PerformanceGetResponseDto;
-import com.bs.perform.services.PerformanceService;
+import com.bs.perform.dtos.request.VenueCreateDto;
+import com.bs.perform.dtos.request.VenueUpdateDto;
+import com.bs.perform.dtos.response.VenueGetResponseDto;
+import com.bs.perform.services.VenueService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,40 +21,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/performances")
-public class PerformanceController {
+@RequestMapping("/venues")
+public class VenueController {
 
-    private final PerformanceService performanceService;
+    private final VenueService venueService;
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommonResponseDto createPerformance(
-        @RequestBody @Valid final PerformanceCreateDto performanceCreateDto) {
-        performanceService.createPerformance(performanceCreateDto);
+    public CommonResponseDto createVenue(
+        @RequestBody @Valid final VenueCreateDto venueCreateDto) {
+        venueService.createVenue(venueCreateDto);
         return new CommonResponseDto(HttpStatus.CREATED.toString(), "successfully created");
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommonResponseDto updatePerformance(
+    public CommonResponseDto updateVenue(
         @PathVariable final Long id,
-        @RequestBody @Valid final PerformanceUpdateDto performanceUpdateDto) {
-        performanceService.updatePerformance(id, performanceUpdateDto);
+        @RequestBody @Valid final VenueUpdateDto venueUpdateDto) {
+        venueService.updateVenue(id, venueUpdateDto);
         return new CommonResponseDto(HttpStatus.OK.toString(), "successfully updated");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping ("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommonResponseDto deletePerformance(
+    public CommonResponseDto deleteVenue(
         @PathVariable final Long id) {
-        performanceService.deletePerformance(id);
+        venueService.deleteVenue(id);
         return new CommonResponseDto(HttpStatus.OK.toString(), "successfully deleted");
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PerformanceGetResponseDto getPerformance(@PathVariable final Long id) {
-        return performanceService.getPerformanceById(id);
+    public VenueGetResponseDto getVenue(@PathVariable final Long id) {
+        return venueService.getVenueById(id);
     }
 
 }
