@@ -28,9 +28,6 @@ public class GradeCreateDto {
     @PositiveOrZero(message = "Price must be positive or zero")
     private BigDecimal price;
 
-    @NotBlank(message = "Performers must not be blank")
-    private String performers;
-
     @Positive(message = "Performance Id must be positive")
     @NotNull(message = "Performance type must not be null")
     private Long performanceId;
@@ -39,7 +36,6 @@ public class GradeCreateDto {
         return Grade.builder()
             .gradeType(this.gradeType)
             .price(this.price)
-            .performers(this.performers)
             .performance(performance)
             .build();
     }

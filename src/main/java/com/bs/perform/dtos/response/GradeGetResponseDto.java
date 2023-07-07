@@ -19,7 +19,6 @@ public class GradeGetResponseDto {
 
     private GradeType gradeType;
     private BigDecimal price;
-    private String performers;
     private Long performanceId;
 
 }

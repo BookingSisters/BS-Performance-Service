@@ -2,6 +2,7 @@ package com.bs.perform.dtos.request;
 
 import com.bs.perform.models.Performance;
 import com.bs.perform.models.Session;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -27,6 +28,9 @@ public class SessionCreateDto {
     @NotNull(message = "Session time must not be null")
     private LocalTime sessionTime;
 
+    @NotBlank(message = "Performers must not be blank")
+    private String performers;
+
     @Positive(message = "Performance Id must be positive")
     @NotNull(message = "Performance Id must not be null")
     private Long performanceId;
@@ -35,6 +39,7 @@ public class SessionCreateDto {
         return Session.builder()
             .sessionDate(this.sessionDate)
             .sessionTime(this.sessionTime)
+            .performers(this.performers)
             .performance(performance)
             .build();
     }

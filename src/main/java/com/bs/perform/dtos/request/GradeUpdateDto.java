@@ -26,14 +26,11 @@ public class GradeUpdateDto {
     @PositiveOrZero(message = "Price must be positive or zero")
     private BigDecimal price;
 
-    @NotBlank(message = "Performers must not be blank")
-    private String performers;
 
     public Grade toEntity() {
         return Grade.builder()
             .gradeType(this.gradeType)
             .price(this.price)
-            .performers(this.performers)
             .build();
     }
 }

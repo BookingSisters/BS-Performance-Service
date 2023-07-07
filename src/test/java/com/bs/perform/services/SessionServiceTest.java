@@ -83,6 +83,7 @@ class SessionServiceTest {
             SessionCreateDto createDto = SessionCreateDto.builder()
                 .sessionDate(LocalDate.of(2023, 7, 15))
                 .sessionTime(LocalTime.of(20,00,00))
+                .performers("배우1, 배우2, 배우3")
                 .performanceId(performanceId)
                 .build();
 
@@ -122,6 +123,7 @@ class SessionServiceTest {
             SessionUpdateDto updateDto = SessionUpdateDto.builder()
                 .sessionDate(LocalDate.of(2023, 7, 15))
                 .sessionTime(LocalTime.of(20,00,00))
+                .performers("배우1, 배우2, 배우3")
                 .build();
 
             doReturn(Optional.of(session)).when(sessionRepository).findByIdAndIsDeletedFalse(sessionId);
@@ -157,6 +159,7 @@ class SessionServiceTest {
             SessionGetResponseDto responseDto = SessionGetResponseDto.builder()
                 .sessionDate(LocalDate.of(2023, 7, 15))
                 .sessionTime(LocalTime.of(20,00,00))
+                .performers("배우1, 배우2, 배우3")
                 .build();
 
             doReturn(Optional.of(session)).when(sessionRepository).findByIdAndIsDeletedFalse(sessionId);
@@ -202,6 +205,7 @@ class SessionServiceTest {
         return Session.builder()
             .sessionDate(LocalDate.of(2023, 7, 15))
             .sessionTime(LocalTime.of(20,00,00))
+            .performers("배우1, 배우2, 배우3")
             .performance(performance)
             .build();
     }

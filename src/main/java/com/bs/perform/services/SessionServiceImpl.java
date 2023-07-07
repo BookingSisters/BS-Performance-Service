@@ -43,7 +43,7 @@ public class SessionServiceImpl implements SessionService {
         log.info("Updating session with SessionUpdateDto: {}", sessionDto);
         Session session = getSession(id);
 
-        session.updateSession(sessionDto.getSessionDate(), sessionDto.getSessionTime());
+        session.updateSession(sessionDto.getSessionDate(), sessionDto.getSessionTime(), sessionDto.getPerformers());
     }
 
     @Override
