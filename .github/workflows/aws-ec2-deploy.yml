@@ -5,7 +5,7 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: [TEST] AWS ECR+EC2 CI/CD
+name: Deploy to Amazon EC2
 
 on:
   push:
@@ -19,7 +19,7 @@ permissions:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
+  AWS_ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
   IMAGE_TAG: ${{ github.sha }}
   
 jobs:
@@ -73,9 +73,9 @@ jobs:
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
       env:
-        AWS_EC2_HOST: ${{ secrets.AWS_EC2_HOST }}
-        AWS_EC2_USERNAME: ${{ secrets.AWS_EC2_USERNAME }}
-        AWS_EC2_SSH_KEY: ${{ secrets.AWS_EC2_SSH_KEY }}
+        AWS_EC2_HOST: ${{ secrets.HOST }}
+        AWS_EC2_USERNAME: ${{ secrets.USERNAME }}
+        AWS_EC2_SSH_KEY: ${{ secrets.SSH_KEY }}
       with:
         host: ${{ env.AWS_EC2_HOST }}
         username: ${{ env.AWS_EC2_USERNAME }}
