@@ -17,6 +17,7 @@ public class SessionGetResponseDto {
 
     private LocalDate sessionDate;
     private LocalTime sessionTime;
+    private String performers;
     private Long performanceId;
 
 }

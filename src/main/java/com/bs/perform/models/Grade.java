@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,26 +35,21 @@ public class Grade extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = false)
-    private String performers;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_id")
     private Performance performance;
 
     @Builder
-    public Grade(GradeType gradeType, BigDecimal price, String performers,
+    public Grade(GradeType gradeType, BigDecimal price,
         Performance performance) {
         this.gradeType = Objects.requireNonNull(gradeType, "grade must not be null");
         this.price = Objects.requireNonNull(price, "price must not be null");
-        this.performers = Objects.requireNonNull(performers, "performers must not be null");
         this.performance = Objects.requireNonNull(performance, "performance must not be null");
     }
 
-    public void updateGrade(GradeType gradeType, BigDecimal price, String performers) {
+    public void updateGrade(GradeType gradeType, BigDecimal price) {
         this.gradeType = Objects.requireNonNull(gradeType, "grade must not be null");
         this.price = Objects.requireNonNull(price, "price must not be null");
-        this.performers = Objects.requireNonNull(performers, "performers must not be null");
     }
 
     public void deleteGrade() {

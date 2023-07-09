@@ -2,6 +2,7 @@ package com.bs.perform.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,20 +32,25 @@ public class Session extends BaseEntity {
     @Column(nullable=false)
     private LocalTime sessionTime;
 
-    @ManyToOne
+    @Column(nullable = false)
+    private String performers;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_id")
     private Performance performance;
 
     @Builder
-    public Session(LocalDate sessionDate, LocalTime sessionTime, Performance performance) {
+    public Session(LocalDate sessionDate, LocalTime sessionTime, String performers, Performance performance) {
         this.sessionDate = Objects.requireNonNull(sessionDate, "sessionDate must not be null");
         this.sessionTime = Objects.requireNonNull(sessionTime, "sessionTime must not be null");
+        this.performers = Objects.requireNonNull(performers, "performers must not be null");
         this.performance = Objects.requireNonNull(performance, "performance must not be null");
     }
 
-    public void updateSession(LocalDate sessionDate, LocalTime sessionTime) {
+    public void updateSession(LocalDate sessionDate, LocalTime sessionTime, String performers) {
         this.sessionDate = Objects.requireNonNull(sessionDate, "sessionDate must not be null");
         this.sessionTime = Objects.requireNonNull(sessionTime, "sessionTime must not be null");
+        this.performers = Objects.requireNonNull(performers, "performers must not be null");
     }
 
     public void deleteSession() {

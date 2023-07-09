@@ -62,7 +62,6 @@ class GradeControllerTest {
         GradeCreateDto dto = GradeCreateDto.builder()
             .gradeType(GradeType.VIP)
             .price(new BigDecimal(200000))
-            .performers("배우1, 배우2, 배우3")
             .performanceId(performanceId)
             .build();
 
@@ -95,7 +94,6 @@ class GradeControllerTest {
         GradeUpdateDto UpdateDto = GradeUpdateDto.builder()
             .gradeType(GradeType.VIP)
             .price(new BigDecimal(200000))
-            .performers("배우1, 배우2, 배우3")
             .build();
 
         doNothing().when(gradeService).updateGrade(gradeId, UpdateDto);
@@ -127,7 +125,6 @@ class GradeControllerTest {
         GradeGetResponseDto responseDto = GradeGetResponseDto.builder()
             .gradeType(GradeType.VIP)
             .price(new BigDecimal(200000))
-            .performers("배우1, 배우2, 배우3")
             .performanceId(performanceId)
             .build();
 
@@ -136,8 +133,7 @@ class GradeControllerTest {
         mockMvc.perform(get("/grades/" + gradeId)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.price").value(responseDto.getPrice()))
-            .andExpect(jsonPath("$.performers").value(responseDto.getPerformers()));
+            .andExpect(jsonPath("$.price").value(responseDto.getPrice()));
     }
 
     @Test
@@ -176,7 +172,6 @@ class GradeControllerTest {
         return Grade.builder()
             .gradeType(GradeType.VIP)
             .price(new BigDecimal(200000))
-            .performers("배우1, 배우2, 배우3")
             .performance(performance)
             .build();
     }

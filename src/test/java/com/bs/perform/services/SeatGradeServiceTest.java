@@ -162,7 +162,6 @@ class SeatGradeServiceTest {
         return Grade.builder()
             .gradeType(GradeType.VIP)
             .price(new BigDecimal(200000))
-            .performers("배우1, 배우2, 배우3")
             .performance(performance)
             .build();
     }

@@ -67,6 +67,7 @@ class SessionControllerTest {
             SessionCreateDto createDto = SessionCreateDto.builder()
                 .sessionDate(LocalDate.of(2023, 7, 15))
                 .sessionTime(LocalTime.of(20, 00, 00))
+                .performers("배우1, 배우2, 배우3")
                 .performanceId(performanceId)
                 .build();
 
@@ -104,6 +105,7 @@ class SessionControllerTest {
             SessionUpdateDto updateDto = SessionUpdateDto.builder()
                 .sessionDate(LocalDate.of(2023, 7, 15))
                 .sessionTime(LocalTime.of(20, 00, 00))
+                .performers("배우1, 배우2, 배우3")
                 .build();
 
             doNothing().when(sessionService).updateSession(sessionId, updateDto);
@@ -140,6 +142,7 @@ class SessionControllerTest {
             SessionGetResponseDto responseDto = SessionGetResponseDto.builder()
                 .sessionDate(LocalDate.of(2023, 7, 15))
                 .sessionTime(LocalTime.of(20, 00, 00))
+                .performers("배우1, 배우2, 배우3")
                 .performanceId(performanceId)
                 .build();
 
@@ -186,6 +189,7 @@ class SessionControllerTest {
         return Session.builder()
             .sessionDate(LocalDate.of(2023, 7, 15))
             .sessionTime(LocalTime.of(20, 00, 00))
+            .performers("배우1, 배우2, 배우3")
             .performance(performance)
             .build();
     }

@@ -2,6 +2,7 @@ package com.bs.perform.dtos.request;
 
 import com.bs.perform.models.Performance;
 import com.bs.perform.models.Session;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -25,10 +26,14 @@ public class SessionUpdateDto {
     @NotNull(message = "Session time must not be null")
     private LocalTime sessionTime;
 
+    @NotBlank(message = "Performers must not be blank")
+    private String performers;
+
     public Session toEntity(Performance performance) {
         return Session.builder()
             .sessionDate(this.sessionDate)
             .sessionTime(this.sessionTime)
+            .performers(this.performers)
             .build();
     }
 }

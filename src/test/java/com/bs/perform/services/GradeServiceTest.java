@@ -69,7 +69,6 @@ class GradeServiceTest {
             GradeCreateDto createDto = GradeCreateDto.builder()
                 .gradeType(GradeType.VIP)
                 .price(new BigDecimal(200000))
-                .performers("배우1, 배우2, 배우3")
                 .performanceId(performanceId)
                 .build();
 
@@ -101,7 +100,6 @@ class GradeServiceTest {
 
             GradeCreateDto createDto = GradeCreateDto.builder()
                 .price(new BigDecimal(200000))
-                .performers("배우1, 배우2, 배우3")
                 .build();
 
             assertThatThrownBy(() -> gradeService.createGrade(createDto))
@@ -121,7 +119,6 @@ class GradeServiceTest {
             GradeUpdateDto updateDto = GradeUpdateDto.builder()
                 .gradeType(GradeType.VIP)
                 .price(new BigDecimal(200000))
-                .performers("배우1, 배우2, 배우3")
                 .build();
 
             doReturn(Optional.of(grade)).when(gradeRepository).findByIdAndIsDeletedFalse(gradeId);
@@ -156,7 +153,6 @@ class GradeServiceTest {
             GradeGetResponseDto responseDto = GradeGetResponseDto.builder()
                 .gradeType(GradeType.VIP)
                 .price(new BigDecimal(200000))
-                .performers("배우1, 배우2, 배우3")
                 .performanceId(performanceId)
                 .build();
 
@@ -202,7 +198,6 @@ class GradeServiceTest {
         return Grade.builder()
             .gradeType(GradeType.VIP)
             .price(new BigDecimal(200000))
-            .performers("배우1, 배우2, 배우3")
             .performance(performance)
             .build();
     }

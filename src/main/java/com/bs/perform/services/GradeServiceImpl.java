@@ -44,7 +44,7 @@ public class GradeServiceImpl implements GradeService {
 
         Grade grade = getGrade(id);
 
-        grade.updateGrade(gradeDto.getGradeType(), gradeDto.getPrice(), gradeDto.getPerformers());
+        grade.updateGrade(gradeDto.getGradeType(), gradeDto.getPrice());
 
     }
 
