@@ -81,6 +81,7 @@ jobs:
           username: ${{ env.AWS_EC2_USERNAME }}
           key: ${{ env.AWS_EC2_SSH_KEY }}
           script: |
+            docker login -u AWS -p $(aws ecr get-login-password --region ${{ env.AWS_REGION }}) ${{ steps.login-ecr.outputs.registry }}
             docker pull ${{ env.AWS_ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
             docker stop my-running-app
             docker rm my-running-app
