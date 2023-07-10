@@ -16,7 +16,7 @@ import com.bs.perform.dtos.response.PerformanceGetResponseDto;
 import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.Performance;
 import com.bs.perform.models.Venue;
-import com.bs.perform.services.PerformanceService;
+import com.bs.perform.services.interfaces.PerformanceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;

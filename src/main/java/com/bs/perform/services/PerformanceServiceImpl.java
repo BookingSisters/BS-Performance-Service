@@ -8,6 +8,7 @@ import com.bs.perform.models.Performance;
 import com.bs.perform.models.Venue;
 import com.bs.perform.repositories.PerformanceRepository;
 import com.bs.perform.repositories.VenueRepository;
+import com.bs.perform.services.interfaces.PerformanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

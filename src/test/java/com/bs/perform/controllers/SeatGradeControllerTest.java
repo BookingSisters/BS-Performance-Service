@@ -17,7 +17,7 @@ import com.bs.perform.models.Performance;
 import com.bs.perform.models.Seat;
 import com.bs.perform.models.SeatGrade;
 import com.bs.perform.models.Venue;
-import com.bs.perform.services.SeatGradeService;
+import com.bs.perform.services.interfaces.SeatGradeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDate;

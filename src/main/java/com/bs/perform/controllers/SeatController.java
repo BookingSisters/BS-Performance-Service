@@ -4,7 +4,7 @@ import com.bs.perform.dtos.response.CommonResponseDto;
 import com.bs.perform.dtos.request.SeatCreateDto;
 import com.bs.perform.dtos.request.SeatUpdateDto;
 import com.bs.perform.dtos.response.SeatGetResponseDto;
-import com.bs.perform.services.SeatService;
+import com.bs.perform.services.interfaces.SeatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

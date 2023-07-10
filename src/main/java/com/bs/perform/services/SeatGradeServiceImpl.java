@@ -9,6 +9,7 @@ import com.bs.perform.models.Seat;
 import com.bs.perform.repositories.GradeRepository;
 import com.bs.perform.repositories.SeatGradeRepository;
 import com.bs.perform.repositories.SeatRepository;
+import com.bs.perform.services.interfaces.SeatGradeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

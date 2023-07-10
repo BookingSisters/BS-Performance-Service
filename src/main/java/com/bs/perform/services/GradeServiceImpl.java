@@ -8,6 +8,7 @@ import com.bs.perform.models.Grade;
 import com.bs.perform.models.Performance;
 import com.bs.perform.repositories.GradeRepository;
 import com.bs.perform.repositories.PerformanceRepository;
+import com.bs.perform.services.interfaces.GradeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

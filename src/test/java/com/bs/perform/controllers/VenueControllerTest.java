@@ -15,7 +15,7 @@ import com.bs.perform.dtos.response.VenueGetResponseDto;
 import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.Seat;
 import com.bs.perform.models.Venue;
-import com.bs.perform.services.VenueService;
+import com.bs.perform.services.interfaces.VenueService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.bs.perform.controllers;
 import com.bs.perform.dtos.response.CommonResponseDto;
 import com.bs.perform.dtos.request.SeatGradeCreateDto;
 import com.bs.perform.dtos.response.SeatGradeGetResponseDto;
-import com.bs.perform.services.SeatGradeService;
+import com.bs.perform.services.interfaces.SeatGradeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
