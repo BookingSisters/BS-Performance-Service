@@ -15,5 +15,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SessionSeatRequestDto {
 
-    List<SessionSeatDto> data;
+    private List<SessionSeatDto> data;
+
+    private String status;
+
+    private String message;
+
 }
