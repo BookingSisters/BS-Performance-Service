@@ -4,7 +4,7 @@ import com.bs.perform.dtos.response.CommonResponseDto;
 import com.bs.perform.dtos.request.SessionCreateDto;
 import com.bs.perform.dtos.request.SessionUpdateDto;
 import com.bs.perform.dtos.response.SessionGetResponseDto;
-import com.bs.perform.services.SessionService;
+import com.bs.perform.services.interfaces.SessionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -4,7 +4,7 @@ import com.bs.perform.dtos.response.CommonResponseDto;
 import com.bs.perform.dtos.request.GradeCreateDto;
 import com.bs.perform.dtos.request.GradeUpdateDto;
 import com.bs.perform.dtos.response.GradeGetResponseDto;
-import com.bs.perform.services.GradeService;
+import com.bs.perform.services.interfaces.GradeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

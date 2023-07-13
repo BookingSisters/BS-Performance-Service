@@ -8,6 +8,7 @@ import com.bs.perform.models.Performance;
 import com.bs.perform.models.Session;
 import com.bs.perform.repositories.PerformanceRepository;
 import com.bs.perform.repositories.SessionRepository;
+import com.bs.perform.services.interfaces.SessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

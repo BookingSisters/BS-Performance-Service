@@ -17,7 +17,7 @@ import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.Grade;
 import com.bs.perform.models.Performance;
 import com.bs.perform.models.Venue;
-import com.bs.perform.services.GradeService;
+import com.bs.perform.services.interfaces.GradeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDate;

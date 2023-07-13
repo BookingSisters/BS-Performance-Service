@@ -6,6 +6,7 @@ import com.bs.perform.dtos.response.VenueGetResponseDto;
 import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.Venue;
 import com.bs.perform.repositories.VenueRepository;
+import com.bs.perform.services.interfaces.VenueService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

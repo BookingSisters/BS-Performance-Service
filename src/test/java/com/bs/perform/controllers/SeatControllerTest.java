@@ -15,7 +15,7 @@ import com.bs.perform.dtos.response.SeatGetResponseDto;
 import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.models.Seat;
 import com.bs.perform.models.Venue;
-import com.bs.perform.services.SeatService;
+import com.bs.perform.services.interfaces.SeatService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

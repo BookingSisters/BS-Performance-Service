@@ -1,4 +1,4 @@
-package com.bs.perform.services;
+package com.bs.perform.services.interfaces;
 
 import com.bs.perform.dtos.request.GradeCreateDto;
 import com.bs.perform.dtos.request.GradeUpdateDto;
