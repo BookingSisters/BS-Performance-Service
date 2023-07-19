@@ -1,21 +1,9 @@
 package com.bs.perform.controllers;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.bs.perform.dtos.response.CommonResponseDto;
 import com.bs.perform.dtos.response.SessionSeatDto;
-import com.bs.perform.dtos.response.SessionSeatRequestDto;
 import com.bs.perform.exceptions.ResourceNotFoundException;
 import com.bs.perform.services.interfaces.SessionSeatGradeService;
-import java.util.Arrays;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +14,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestClientException;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,12 +51,12 @@ class SessionSeatControllerTest {
 
         List<SessionSeatDto> expectedResponse = Arrays.asList(sessionSeatDto);
         doReturn(expectedResponse).when(sessionSeatGradeService).getSessionSeatGradeById(
-            performanceId);
+                performanceId);
 
         mockMvc.perform(get("/performances/" + performanceId + "/sessionSeats")
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)));
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
 
         verify(sessionSeatGradeService, times(1)).getSessionSeatGradeById(performanceId);
     }
@@ -68,12 +66,12 @@ class SessionSeatControllerTest {
     void getSessionSeatGradeFailureTest() throws Exception {
 
         doThrow(ResourceNotFoundException.class).when(sessionSeatGradeService)
-            .getSessionSeatGradeById(
-                performanceId);
+                .getSessionSeatGradeById(
+                        performanceId);
 
         mockMvc.perform(get("/performances/" + performanceId + "/sessionSeats")
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest());
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
 
         verify(sessionSeatGradeService, times(1)).getSessionSeatGradeById(performanceId);
     }
@@ -83,15 +81,14 @@ class SessionSeatControllerTest {
     void sendSessionSeatGradeSuccessTest() throws Exception {
 
         List<SessionSeatDto> sessionSeatDtos = Arrays.asList(this.sessionSeatDto);
-        SessionSeatRequestDto sessionSeatRequestDto = new SessionSeatRequestDto(sessionSeatDtos,
-            "success", "");
+        CommonResponseDto commonResponseDto = new CommonResponseDto("success", "");
 
-        doReturn(sessionSeatRequestDto).when(sessionSeatGradeService)
-            .sendSessionSeatGradeToReservation(performanceId);
+        doNothing().when(sessionSeatGradeService)
+                .sendSessionSeatGradeToReservation(performanceId);
 
         mockMvc.perform(post("/performances/" + performanceId + "/sessionSeats")
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -99,10 +96,10 @@ class SessionSeatControllerTest {
     void sendSessionSeatGradeFailureTest() throws Exception {
 
         doThrow(RestClientException.class).when(sessionSeatGradeService)
-            .sendSessionSeatGradeToReservation(performanceId);
+                .sendSessionSeatGradeToReservation(performanceId);
 
         mockMvc.perform(post("/performances/" + performanceId + "/sessionSeats")
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isInternalServerError());
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());
     }
 }

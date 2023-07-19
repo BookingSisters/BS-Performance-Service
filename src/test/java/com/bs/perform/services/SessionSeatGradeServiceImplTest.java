@@ -1,15 +1,5 @@
 package com.bs.perform.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import com.bs.perform.apis.ReservationRestClient;
 import com.bs.perform.dtos.response.SessionSeatDto;
 import com.bs.perform.dtos.response.SessionSeatRequestDto;
@@ -20,10 +10,6 @@ import com.bs.perform.models.Session;
 import com.bs.perform.repositories.PerformanceRepository;
 import com.bs.perform.repositories.SeatGradeRepository;
 import com.bs.perform.repositories.SessionRepository;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +18,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClientException;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SessionSeatGradeServiceImplTest {
@@ -70,14 +65,14 @@ public class SessionSeatGradeServiceImplTest {
     void getSessionSeatGradeByIdSuccessTest() {
 
         doReturn(Optional.of(performance)).when(performanceRepository)
-            .findByIdAndIsDeletedFalse(anyLong());
+                .findByIdAndIsDeletedFalse(anyLong());
         doReturn(Collections.singletonList(session)).when(sessionRepository)
-            .findByPerformanceIdAndIsDeletedFalse(anyLong());
+                .findByPerformanceIdAndIsDeletedFalse(anyLong());
         doReturn(Collections.singletonList(seatGrade)).when(seatGradeRepository)
-            .findGradeFetchJoinSeatGrade(any());
+                .findGradeFetchJoinSeatGrade(any());
 
         List<SessionSeatDto> result = sessionSeatGradeService.getSessionSeatGradeById(
-            performanceId);
+                performanceId);
 
         verify(performanceRepository, times(1)).findByIdAndIsDeletedFalse(anyLong());
         verify(sessionRepository, times(1)).findByPerformanceIdAndIsDeletedFalse(anyLong());
@@ -91,36 +86,32 @@ public class SessionSeatGradeServiceImplTest {
         doReturn(Optional.empty()).when(performanceRepository).findByIdAndIsDeletedFalse(anyLong());
 
         assertThatThrownBy(() -> sessionSeatGradeService.getSessionSeatGradeById(performanceId))
-            .isInstanceOf(ResourceNotFoundException.class);
+                .isInstanceOf(ResourceNotFoundException.class);
 
         verify(performanceRepository, times(1)).findByIdAndIsDeletedFalse(anyLong());
     }
 
     @Test
-    @DisplayName("유효한 performanceId가 주어졌을 때, SessionSeatResponseDto를 반환")
+    @DisplayName("유효한 performanceId가 주어졌을 때, 정상적으로 처리")
     void sendSessionSeatGradeToReservationSuccessTest() {
 
-        SessionSeatDto sessionSeatDto = SessionSeatDto.builder().performanceId(1L).sessionId(1L)
-            .seatGradeId(1L).build();
+        SessionSeatDto sessionSeatDto = SessionSeatDto.builder().sessionId(1L)
+                .seatGradeId(1L).build();
         List<SessionSeatDto> sessionSeatDtos = Arrays.asList(sessionSeatDto);
-        SessionSeatRequestDto sessionSeatRequestDto = new SessionSeatRequestDto(sessionSeatDtos,
-            "success", "");
 
         doReturn(Optional.of(performance)).when(performanceRepository)
-            .findByIdAndIsDeletedFalse(anyLong());
+                .findByIdAndIsDeletedFalse(anyLong());
         doReturn(Collections.singletonList(session)).when(sessionRepository)
-            .findByPerformanceIdAndIsDeletedFalse(anyLong());
+                .findByPerformanceIdAndIsDeletedFalse(anyLong());
         doReturn(Collections.singletonList(seatGrade)).when(seatGradeRepository)
-            .findGradeFetchJoinSeatGrade(any());
-        doReturn(sessionSeatRequestDto).when(reservationRestClient)
-            .sendSessionSeatGradeToReservation(anyLong(), any(SessionSeatRequestDto.class));
+                .findGradeFetchJoinSeatGrade(any());
+        doNothing().when(reservationRestClient)
+                .sendSessionSeatGradeToReservation(anyLong(), any(SessionSeatRequestDto.class));
 
-        SessionSeatRequestDto result = sessionSeatGradeService.sendSessionSeatGradeToReservation(
-            performanceId);
+        sessionSeatGradeService.sendSessionSeatGradeToReservation(performanceId);
 
-        assertThat(result).isEqualTo(sessionSeatRequestDto);
         verify(reservationRestClient, times(1)).sendSessionSeatGradeToReservation(anyLong(),
-            any(SessionSeatRequestDto.class));
+                any(SessionSeatRequestDto.class));
     }
 
     @Test
@@ -129,17 +120,17 @@ public class SessionSeatGradeServiceImplTest {
 
 
         doReturn(Optional.of(performance)).when(performanceRepository)
-            .findByIdAndIsDeletedFalse(anyLong());
+                .findByIdAndIsDeletedFalse(anyLong());
         doReturn(Collections.singletonList(session)).when(sessionRepository)
-            .findByPerformanceIdAndIsDeletedFalse(anyLong());
+                .findByPerformanceIdAndIsDeletedFalse(anyLong());
         doReturn(Collections.singletonList(seatGrade)).when(seatGradeRepository)
-            .findGradeFetchJoinSeatGrade(any());
+                .findGradeFetchJoinSeatGrade(any());
         doThrow(RestClientException.class).when(reservationRestClient)
-            .sendSessionSeatGradeToReservation(anyLong(), any(SessionSeatRequestDto.class));
+                .sendSessionSeatGradeToReservation(anyLong(), any(SessionSeatRequestDto.class));
 
         assertThatThrownBy(
-            () -> sessionSeatGradeService.sendSessionSeatGradeToReservation(performanceId))
-            .isInstanceOf(RestClientException.class);
+                () -> sessionSeatGradeService.sendSessionSeatGradeToReservation(performanceId))
+                .isInstanceOf(RestClientException.class);
     }
 
 }
