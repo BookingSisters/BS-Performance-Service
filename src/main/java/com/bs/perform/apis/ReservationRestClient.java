@@ -28,14 +28,12 @@ public class ReservationRestClient {
         log.info("sendSessionSeatGradeToReservation with ID: {}, SessionSeatRequestDto: {}", performanceId, requestDto);
 
         String url = externalServiceReservationUrl + "/seats/batch";
-
         ResponseEntity<CommonResponseDto> response = restTemplate.postForEntity(url, requestDto, CommonResponseDto.class);
         validateResponse(response);
-
     }
 
     private static void validateResponse(ResponseEntity<CommonResponseDto> response) {
-        if(response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
+        if(!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
             throw new ExternalServiceException("Sessions seats not created. HTTP Status: " + response.getStatusCode());
         }
     }
