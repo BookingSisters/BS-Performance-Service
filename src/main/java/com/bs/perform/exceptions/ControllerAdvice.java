@@ -42,10 +42,16 @@ public class ControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(ExternalServiceException.class)
+    public ErrorResultResponseDto externalServiceExceptionHandler(ExternalServiceException e) {
+        log.error("[ExternalServiceException] ex", e);
+        return new ErrorResultResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ErrorResultResponseDto exHandler(Exception e) {
         log.error("[exceptionHandler] ex", e);
-        return new ErrorResultResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-            e.getMessage());
+        return new ErrorResultResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage());
     }
 }

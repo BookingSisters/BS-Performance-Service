@@ -11,12 +11,13 @@ import com.bs.perform.repositories.PerformanceRepository;
 import com.bs.perform.repositories.SeatGradeRepository;
 import com.bs.perform.repositories.SessionRepository;
 import com.bs.perform.services.interfaces.SessionSeatGradeService;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,15 +39,15 @@ public class SessionSeatGradeServiceImpl implements SessionSeatGradeService {
     }
 
     @Override
-    public SessionSeatRequestDto sendSessionSeatGradeToReservation(final Long performanceId) {
+    public void sendSessionSeatGradeToReservation(final Long performanceId) {
 
         log.info("sendSessionSeatGradeToReservation with ID: {}", performanceId);
 
         SessionSeatRequestDto sessionSeatRequestDto = SessionSeatRequestDto.builder()
-            .data(getSessionSeats(performanceId))
-            .build();
+                .data(getSessionSeats(performanceId))
+                .build();
 
-        return reservationRestClientService.sendSessionSeatGradeToReservation(performanceId, sessionSeatRequestDto);
+        reservationRestClientService.sendSessionSeatGradeToReservation(performanceId, sessionSeatRequestDto);
     }
 
     private List<SessionSeatDto> getSessionSeats(Long performanceId) {
@@ -56,31 +57,31 @@ public class SessionSeatGradeServiceImpl implements SessionSeatGradeService {
         List<SeatGrade> seatGrades = findSeatGrades(performance);
 
         return sessions.stream()
-            .flatMap(session -> seatGrades.stream()
-                .map(seatGrade -> SessionSeatDto.builder()
-                    .performanceId(performanceId)
-                    .sessionId(session.getId())
-                    .seatGradeId(seatGrade.getId())
-                    .build()))
-            .collect(Collectors.toList());
+                .flatMap(session -> seatGrades.stream()
+                        .map(seatGrade -> SessionSeatDto.builder()
+                                .performanceId(performanceId)
+                                .sessionId(session.getId())
+                                .seatGradeId(seatGrade.getId())
+                                .build()))
+                .collect(Collectors.toList());
     }
 
     private Performance getPerformance(Long performanceId) {
         return performanceRepository.findByIdAndIsDeletedFalse(performanceId)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Performance", String.valueOf(performanceId)));
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Performance", String.valueOf(performanceId)));
     }
 
     private List<Session> findSessions(Long performanceId) {
         List<Session> sessions = sessionRepository.findByPerformanceIdAndIsDeletedFalse(
-            performanceId);
+                performanceId);
 
         log.info("Fetched {} sessions objects for performanceId: {}", sessions.size(),
-            performanceId);
+                performanceId);
 
         if (sessions.isEmpty()) {
             throw new ResourceNotFoundException("sessions of performance",
-                String.valueOf(performanceId));
+                    String.valueOf(performanceId));
         }
         return sessions;
     }
@@ -89,11 +90,11 @@ public class SessionSeatGradeServiceImpl implements SessionSeatGradeService {
         List<SeatGrade> seatGrades = seatGradeRepository.findGradeFetchJoinSeatGrade(performance);
 
         log.info("Fetched {} seatGrades objects for performanceId: {}", seatGrades.size(),
-            performance.getId());
+                performance.getId());
 
         if (seatGrades.isEmpty()) {
             throw new ResourceNotFoundException("seatGrades of performance",
-                String.valueOf(performance.getId()));
+                    String.valueOf(performance.getId()));
         }
         return seatGrades;
     }
